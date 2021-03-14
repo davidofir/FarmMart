@@ -4,17 +4,16 @@ import Colors from '../constants/colors';
 const buttonComponent = props =>{
     return(
     <TouchableOpacity>
-        <Text style={styles.button}>{props.buttonTitle}</Text>
+        <Text style={[styles.button,{backgroundColor:props.background,color:props.textColor,borderColor:props.borderColorStyle}]}>{props.buttonTitle}</Text>
     </TouchableOpacity>
     );
 }
 const styles = StyleSheet.create({
     button:{
-        backgroundColor:Colors.primary,
         paddingHorizontal:30,
         paddingVertical:10,
-        color:Colors.secondary,
-        borderRadius:50
+        borderRadius:50,
+        borderWidth:2
     },
 });
 export default buttonComponent;

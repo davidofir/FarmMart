@@ -6,13 +6,13 @@ import ButtonComponent from './components/ButtonComponent';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>FarmMart</Text>
+      <Text>Welcome</Text>
       <View style={styles.buttons}>
         <View style={styles.buttonContainer}>
-        <ButtonComponent buttonTitle="Sign In"/>
+        <ButtonComponent textColor={Colors.secondary} background={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Sign In"/>
       </View>
         <View style={styles.buttonContainer}>
-          <ButtonComponent buttonTitle="Sign Up"/>
+          <ButtonComponent textColor={Colors.primary} background={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Sign Up"/>
         </View>
       </View>
       <StatusBar style="auto" />
