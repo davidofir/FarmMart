@@ -1,3 +1,4 @@
 export default {
-    primary:'blue'
+    primary:'#6677FF',
+    secondary:"white"
 };

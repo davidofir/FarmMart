@@ -2,18 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Button, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import Colors from './constants/colors';
+import ButtonComponent from './components/ButtonComponent';
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>FarmMart</Text>
       <View style={styles.buttons}>
         <View style={styles.buttonContainer}>
-          <Button title="Login"/>
+        <ButtonComponent buttonTitle="Sign In"/>
       </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity>
-            <Text style={styles.button}>Sign Up</Text>
-            </TouchableOpacity>
+          <ButtonComponent buttonTitle="Sign Up"/>
         </View>
       </View>
       <StatusBar style="auto" />
