@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
+import Login from './components/Login'
 import Colors from './constants/colors';
 import HomePage from './components/HomePage'
 import 'react-native-gesture-handler';
@@ -13,6 +13,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomePage}/>
+        <Stack.Screen name="Login" component={Login}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

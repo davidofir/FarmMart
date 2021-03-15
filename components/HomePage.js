@@ -1,14 +1,18 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import Colors from '../constants/colors';
+import Login from './Login';
+import 'react-native-gesture-handler';
 import ButtonComponent from './ButtonComponent';
-const HomePage = props =>{
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+const HomePage = ({navigation}) =>{
     return(
     <View style={styles.container}>
         <Text>Welcome</Text>
         <View style={styles.buttons}>
             <View style={styles.buttonContainer}>
-                <ButtonComponent textColor={Colors.secondary} background={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Sign In"/>
+                <ButtonComponent clickEvent={()=>navigation.navigate("Login")} textColor={Colors.secondary} background={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Sign In"/>
             </View>
             <View style={styles.buttonContainer}>
                 <ButtonComponent textColor={Colors.primary} background={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Sign Up"/>

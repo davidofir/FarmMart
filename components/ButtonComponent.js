@@ -4,7 +4,7 @@ import Colors from '../constants/colors';
 const buttonComponent = props =>{
     return(
     <TouchableOpacity>
-        <Text style={[styles.button,{backgroundColor:props.background,color:props.textColor,borderColor:props.borderColorStyle}]}>{props.buttonTitle}</Text>
+        <Text onPress={props.clickEvent} style={[styles.button,{backgroundColor:props.background,color:props.textColor,borderColor:props.borderColorStyle}]}>{props.buttonTitle}</Text>
     </TouchableOpacity>
     );
 }
