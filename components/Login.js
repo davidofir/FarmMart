@@ -8,7 +8,7 @@ const Login = props =>{return(
     <View style={styles.container}>
         <View style={styles.inputs}>
             <View style={styles.input}>
-                <TextInput placeholder="UserName" autoCompleteType="username"/>
+                <TextInput placeholder="Email" autoCompleteType="email"/>
             </View>
             <View style={styles.input}>
                 <TextInput placeholder="Password" secureTextEntry={true} autoCompleteType="password"/>
@@ -42,9 +42,8 @@ const styles = StyleSheet.create({
     buttonContainer:{
         flex:1,
         alignItems: 'center',
-        justifyContent:"flex-end",
-        marginBottom:125,
-        marginLeft:70
+        justifyContent:"center",
+        marginHorizontal:65
     },
   });
 export default Login;
