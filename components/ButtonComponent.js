@@ -10,9 +10,9 @@ const buttonComponent = props =>{
 }
 const styles = StyleSheet.create({
     button:{
-        paddingHorizontal:30,
+        paddingHorizontal:105,
         paddingVertical:10,
-        borderRadius:50,
+        borderRadius:10,
         borderWidth:2
     },
 });

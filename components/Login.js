@@ -2,7 +2,7 @@ import React from 'react';
 import {Text,View,TextInput,StyleSheet,Button} from 'react-native';
 import { max } from 'react-native-reanimated';
 import Colors from '../constants/colors'
-import SubmitButton from './SubmitButton'
+import ButtonComponent from './ButtonComponent'
 const Login = props =>{return(
 
     <View style={styles.container}>
@@ -15,9 +15,7 @@ const Login = props =>{return(
             </View>
         </View>
 <View style={styles.buttonContainer}>
-    <View style={styles.buttonAligner}>
-        <SubmitButton background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
-    </View>
+        <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
 </View>
     </View>
 
@@ -31,7 +29,7 @@ const styles = StyleSheet.create({
       justifyContent:"flex-start",
     },
     inputs:{
-        marginVertical:25,
+        marginVertical:120,
         marginHorizontal:25
     },
     input:{
@@ -45,6 +43,8 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         justifyContent:"flex-end",
+        marginBottom:125,
+        marginLeft:70
     },
   });
 export default Login;
