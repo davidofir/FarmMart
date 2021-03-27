@@ -3,7 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import Colors from '../constants/colors';
 import Login from './Login';
 import 'react-native-gesture-handler';
-import ButtonComponent from './ButtonComponent';
+import ButtonComponent from '../components/ButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const HomePage = ({navigation}) =>{
