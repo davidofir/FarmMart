@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Text,View,TextInput,StyleSheet,Button} from 'react-native';
 import { max } from 'react-native-reanimated';
 import Colors from '../constants/colors'
-import ButtonComponent from './ButtonComponent'
-const Login = props =>{return(
-
+import Checkbox from '../components/Checkbox'
+import ButtonComponent from '../components/ButtonComponent'
+const Login = props =>{
+    return(
     <View style={styles.container}>
         <View style={styles.inputs}>
             <View style={styles.input}>
@@ -13,9 +14,16 @@ const Login = props =>{return(
             <View style={styles.input}>
                 <TextInput placeholder="Password" secureTextEntry={true} autoCompleteType="password"/>
             </View>
+            <View style={styles.registerContainer}>
+                <Text>Create an account</Text>
+            </View>
         </View>
 <View style={styles.buttonContainer}>
         <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
+        <View style={styles.rememberMeContainer}>
+            <Checkbox/>
+            <Text style={styles.rememberMeText}>Keep Me Logged In</Text>
+        </View>
 </View>
     </View>
 
@@ -29,7 +37,7 @@ const styles = StyleSheet.create({
       justifyContent:"flex-start",
     },
     inputs:{
-        marginVertical:120,
+        marginVertical:125,
         marginHorizontal:25
     },
     input:{
@@ -45,5 +53,18 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         marginHorizontal:65
     },
+    rememberMeContainer:{
+        marginTop:10,
+        flexDirection:"row"
+    },
+    rememberMeText:{
+        marginTop:4,
+        marginLeft:5
+
+    },
+    registerContainer:{
+        marginTop:20,
+        alignItems:"center"
+    }
   });
 export default Login;

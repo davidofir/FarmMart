@@ -3,9 +3,9 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
-import Login from './components/Login'
+import Login from './pages/Login'
 import Colors from './constants/colors';
-import HomePage from './components/HomePage'
+import HomePage from './pages/HomePage'
 import 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 export default function App() {
