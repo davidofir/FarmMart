@@ -11,22 +11,23 @@ const Login = props =>{
     const [error,setError] = useState("");
     const signIn = async () =>{
         try{
-            const response = await firebase.auth().createUserWithEmailAndPassword(email,password);
-            navigation.navigate("signin");
+            const response = await firebase.auth().signInWithEmailAndPassword(email,password);
+            // navigation.navigate("signin");
+            alert("authentication performed successfully");
         }
         catch(err){
             setError(err.message);
-            console.log(err);
+            console.log(error);
         }
     }
     return(
     <View style={styles.container}>
         <View style={styles.inputs}>
             <View style={styles.input}>
-                <TextInput placeholder="Email" autoCompleteType="email"/>
+                <TextInput placeholder="Email" onChangeText={setEmail} autoCompleteType="email"/>
             </View>
             <View style={styles.input}>
-                <TextInput placeholder="Password" secureTextEntry={true} autoCompleteType="password"/>
+                <TextInput placeholder="Password" onChangeText={setPassword} secureTextEntry={true} autoCompleteType="password"/>
             </View>
             <View style={styles.registerContainer}>
                 <Text>Create an account</Text>
