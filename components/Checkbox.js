@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         marginTop:10,
     },
     label:{
-        marginTop:4,
+        marginTop:5,
         marginLeft:5
     }
 });
