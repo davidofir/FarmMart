@@ -4,7 +4,21 @@ import { max } from 'react-native-reanimated';
 import Colors from '../constants/colors'
 import Checkbox from '../components/Checkbox'
 import ButtonComponent from '../components/ButtonComponent'
+import firebase from 'firebase';
 const Login = props =>{
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
+    const [error,setError] = useState("");
+    const signIn = async () =>{
+        try{
+            const response = await firebase.auth().createUserWithEmailAndPassword(email,password);
+            navigation.navigate("signin");
+        }
+        catch(err){
+            setError(err.message);
+            console.log(err);
+        }
+    }
     return(
     <View style={styles.container}>
         <View style={styles.inputs}>
@@ -19,7 +33,7 @@ const Login = props =>{
             </View>
         </View>
 <View style={styles.buttonContainer}>
-        <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
+        <ButtonComponent clickEvent={()=>signIn()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
             <Checkbox label="Keep me logged in"/>
 </View>
     </View>
@@ -40,7 +54,8 @@ const styles = StyleSheet.create({
     input:{
         padding:5,
         borderBottomWidth:2,
-        margin:5,
+        marginVertical:5,
+        marginHorizontal:5,
         borderBottomColor:Colors.primary,
         width:330
     },
