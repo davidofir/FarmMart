@@ -20,10 +20,7 @@ const Login = props =>{
         </View>
 <View style={styles.buttonContainer}>
         <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit"/>
-        <View style={styles.rememberMeContainer}>
-            <Checkbox/>
-            <Text style={styles.rememberMeText}>Keep Me Logged In</Text>
-        </View>
+            <Checkbox label="Keep me logged in"/>
 </View>
     </View>
 

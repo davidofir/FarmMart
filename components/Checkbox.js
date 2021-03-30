@@ -7,22 +7,27 @@ const Checkbox = props =>{
     const [buttonContent,setButtonContent] = useState("");
     const [background,setBackground] = useState(Colors.secondary);
     const [isChecked,setIsChecked] = useState(false);
-    return(
-        <View>
-        <TouchableOpacity style={[{backgroundColor:background},styles.checkboxContainer]} onPress={()=>{
-            if(!isChecked){
-                setIsChecked(true);
-                setButtonContent("✓");
-                setBackground(Colors.primary);
+    const  toggle=()=>{
+        if(!isChecked){
+            setIsChecked(true);
+            setButtonContent("✓");
+            setBackground(Colors.primary);
 
-            }else{
-                setIsChecked(false);
-                setButtonContent("");
-                setBackground(Colors.secondary);
-            }
-    }}>
+        }else{
+            setIsChecked(false);
+            setButtonContent("");
+            setBackground(Colors.secondary);
+        }
+}
+    return(
+        
+        <View style={styles.checkboxAligner}>
+        <TouchableOpacity style={[{backgroundColor:background},styles.checkboxContainer]} onPress={toggle}>
                <Text style={{color:Colors.secondary,textAlign:"center",fontSize:10}}>{buttonContent}</Text> 
         </TouchableOpacity>
+        <Text style={styles.label} onPress={toggle}>
+            {props.label}
+        </Text>
     </View>
     );
 }
@@ -38,6 +43,13 @@ const styles = StyleSheet.create({
         
         
     },
-
+    checkboxAligner:{
+        flexDirection:"row",
+        marginTop:10,
+    },
+    label:{
+        marginTop:4,
+        marginLeft:5
+    }
 });
 export default Checkbox;
