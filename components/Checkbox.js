@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
         marginTop:10,
     },
     label:{
-        marginTop:5,
-        marginLeft:5
+        marginTop:2,
+        marginLeft:5,
+        padding:2
     }
 });
 export default Checkbox;
