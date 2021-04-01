@@ -4,8 +4,11 @@ import { max } from 'react-native-reanimated';
 import Colors from '../constants/colors'
 import Checkbox from '../components/Checkbox'
 import ButtonComponent from '../components/ButtonComponent'
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import firebase from 'firebase';
-const Login = props => {
+const Login = ({navigation},props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -32,7 +35,7 @@ const Login = props => {
                     <TextInput placeholder="Password" onChangeText={setPassword} secureTextEntry={true} autoCompleteType="password" />
                 </View>
                 <View style={styles.registerContainer}>
-                    <Text>Create an account</Text>
+                    <Text onPress={()=>navigation.navigate("Signup")}>Create an account</Text>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
