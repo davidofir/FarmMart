@@ -31,7 +31,7 @@ const signup = props => {
         <View style={styles.container}>
             <View style={styles.inputs}>
                 <View style={styles.input}>
-                    <TextInput placeholder="Email" onChangeText={setEmail} autoCompleteType={"email"}/>
+                    <TextInput placeholder="Email" onChangeText={setEmail} autoCompleteType={"email"} autoCapitalize="none"/>
                 </View>
                 <View style={styles.input}>
                     <TextInput placeholder="Password" onChangeText={setPassword} secureTextEntry={true} autoCompleteType="password" />
