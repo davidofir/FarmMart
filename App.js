@@ -19,6 +19,7 @@ if(firebase.apps.length === 0){
 import { Button, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import Login from './pages/Login'
 import Colors from './constants/colors';
+import Signup from './pages/Signup';
 import HomePage from './pages/HomePage'
 import 'react-native-gesture-handler';
 const Stack = createStackNavigator();
@@ -28,6 +29,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomePage}/>
         <Stack.Screen name="Login" component={Login}/>
+        <Stack.Screen name="Signup" component={Signup}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
