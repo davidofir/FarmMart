@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, StyleSheet, Button } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Button,Alert } from 'react-native';
 import Colors from '../constants/colors';
 import ButtonComponent from '../components/ButtonComponent';
 import * as firebase from 'firebase';
@@ -20,10 +20,11 @@ const signup = props => {
                     shippingAddress:address
                 });
             });
-            
         }
         catch(err){
-            console.log(err);
+            setError(err);
+            Alert.alert("error",`${error}`);
+            console.log(error);
         }
     }
     return (
@@ -43,7 +44,9 @@ const signup = props => {
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <ButtonComponent clickEvent={() => SignupAction()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
+                <ButtonComponent clickEvent={() => { 
+                    password === confirmPassword?SignupAction():Alert.alert("error","Error: The passwords don't match");
+                    }} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
             </View>
         </View>
     )

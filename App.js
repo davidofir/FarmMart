@@ -3,7 +3,9 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs(['Setting a timer']);
 const firebaseConfig = {
   apiKey: "AIzaSyC5_3euKIb8ScfRbQOM7AUqkBihbl2syf4",
   authDomain: "farmmart-f2a33.firebaseapp.com",
