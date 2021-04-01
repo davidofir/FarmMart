@@ -2,12 +2,30 @@ import React, { useState } from 'react';
 import { Text, View, TextInput, StyleSheet, Button } from 'react-native';
 import Colors from '../constants/colors';
 import ButtonComponent from '../components/ButtonComponent';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 const signup = props => {
+    const db = firebase.firestore();
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [address, setAddress] = useState("");
+    const [error, setError] = useState("");
+    const SignupAction = async ()=>{
+        try{
+            setError("");
+            const response = await firebase.auth().createUserWithEmailAndPassword(email,password).then(cred=>{
+                return db.collection('users').doc(cred.user.uid).set({
+                    shippingAddress:address
+                });
+            });
+            
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.inputs}>
@@ -25,7 +43,7 @@ const signup = props => {
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
+                <ButtonComponent clickEvent={() => SignupAction()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
             </View>
         </View>
     )
