@@ -15,9 +15,16 @@ const Login = ({navigation},props) => {
     const signIn = async () => {
         try {
             setError("");
-            const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+            const response = await firebase.auth().signInWithEmailAndPassword(email, password).then(
+                (cred)=>{
+                    navigation.navigate("Menu",{
+                        userId:cred.user.uid,
+                        email:email
+                    });
+            }
+            );
             // navigation.navigate("signin");
-            alert("authentication performed successfully");
+
         }
         catch (err) {
             setError(err.message);

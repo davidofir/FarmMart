@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
 import { LogBox } from 'react-native';
-
+import Menu from './pages/Menu';
 LogBox.ignoreLogs(['Setting a timer']);
 const firebaseConfig = {
   apiKey: "AIzaSyC5_3euKIb8ScfRbQOM7AUqkBihbl2syf4",
@@ -32,6 +32,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomePage}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Signup" component={Signup}/>
+        <Stack.Screen name="Menu" component={Menu}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

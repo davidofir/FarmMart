@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, StyleSheet, Button,Alert } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Button, Alert } from 'react-native';
 import Colors from '../constants/colors';
 import ButtonComponent from '../components/ButtonComponent';
 import * as firebase from 'firebase';
@@ -7,23 +7,24 @@ import 'firebase/firestore';
 
 const signup = props => {
     const db = firebase.firestore();
-    const [email,setEmail] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword,setConfirmPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [address, setAddress] = useState("");
     const [error, setError] = useState("");
-    const SignupAction = async ()=>{
-        try{
+    const SignupAction = async () => {
+        try {
             setError("");
-            const response = await firebase.auth().createUserWithEmailAndPassword(email,password).then(cred=>{
+            const response = await firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
                 return db.collection('users').doc(cred.user.uid).set({
-                    shippingAddress:address
+                    shippingAddress: address
                 });
             });
         }
-        catch(err){
+        catch (err) {
             setError(err);
-            Alert.alert("error",`${error}`);
+            var errorFormatted = err.toString().replace("Error: ", "");
+            Alert.alert("Error", `${errorFormatted}`);
             console.log(error);
         }
     }
@@ -31,7 +32,7 @@ const signup = props => {
         <View style={styles.container}>
             <View style={styles.inputs}>
                 <View style={styles.input}>
-                    <TextInput placeholder="Email" onChangeText={setEmail} autoCompleteType={"email"} autoCapitalize="none"/>
+                    <TextInput placeholder="Email" onChangeText={setEmail} autoCompleteType={"email"} autoCapitalize="none" />
                 </View>
                 <View style={styles.input}>
                     <TextInput placeholder="Password" onChangeText={setPassword} secureTextEntry={true} autoCompleteType="password" />
@@ -40,13 +41,13 @@ const signup = props => {
                     <TextInput placeholder="Confirm Password" onChangeText={setConfirmPassword} secureTextEntry={true} autoCompleteType="password" />
                 </View>
                 <View style={styles.input}>
-                    <TextInput placeholder="Address" onChangeText={setAddress} autoCompleteType={"street-address"}/>
+                    <TextInput placeholder="Address" onChangeText={setAddress} autoCompleteType={"street-address"} />
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <ButtonComponent clickEvent={() => { 
-                    password === confirmPassword?SignupAction():Alert.alert("error","Error: The passwords don't match");
-                    }} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
+                <ButtonComponent clickEvent={() => {
+                    password === confirmPassword ? SignupAction() : Alert.alert("error", "The passwords don't match");
+                }} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
             </View>
         </View>
     )
