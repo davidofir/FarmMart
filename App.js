@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { LogBox } from 'react-native';
 import Menu from './pages/Menu';
@@ -18,7 +19,7 @@ const firebaseConfig = {
 if(firebase.apps.length === 0){
   firebase.initializeApp(firebaseConfig);
 }
-import { Button, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import Login from './pages/Login'
 import Colors from './constants/colors';
 import Signup from './pages/Signup';

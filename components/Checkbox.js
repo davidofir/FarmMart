@@ -2,6 +2,7 @@ import React from 'react';
 import {View,TouchableOpacity,Text,StyleSheet} from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useState } from 'react/cjs/react.development';
+import { Icon } from 'react-native-elements'
 import Colors from '../constants/colors';
 const Checkbox = props =>{
     const [buttonContent,setButtonContent] = useState("");
@@ -10,7 +11,7 @@ const Checkbox = props =>{
     const  toggle=()=>{
         if(!isChecked){
             setIsChecked(true);
-            setButtonContent("✓");
+            setButtonContent(<Icon name='check' color={Colors.secondary} size={13} type='material'/>);
             setBackground(Colors.primary);
 
         }else{
@@ -35,8 +36,8 @@ const styles = StyleSheet.create({
     checkboxContainer:{
         marginTop:5,
         borderWidth:2,
-        height:18,
-        width:18,
+        height:16,
+        width:16,
         textAlign:'center',
         color:Colors.secondary,
         borderColor:Colors.primary,

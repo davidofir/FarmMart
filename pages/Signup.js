@@ -4,20 +4,33 @@ import Colors from '../constants/colors';
 import ButtonComponent from '../components/ButtonComponent';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import 'react-native-gesture-handler';
 
-const signup = props => {
+const signup = ({navigation},props) => {
     const db = firebase.firestore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [address, setAddress] = useState("");
     const [error, setError] = useState("");
+    const [name,setName] = useState("");
+    const [lastName, setLastName] = useState("");
+    var userID = "";
     const SignupAction = async () => {
         try {
             setError("");
             const response = await firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
+                userID = cred.user.uid;
+                console.log(cred.user.uid);
                 return db.collection('users').doc(cred.user.uid).set({
-                    shippingAddress: address
+                    shippingAddress: address,
+                    firstName:name,
+                    lastName:lastName
+                })
+            }).then(()=>{
+                navigation.navigate("Menu",{
+                    userId:userID,
+                    email:email,
                 });
             });
         }
@@ -40,8 +53,16 @@ const signup = props => {
                 <View style={styles.input}>
                     <TextInput placeholder="Confirm Password" onChangeText={setConfirmPassword} secureTextEntry={true} autoCompleteType="password" />
                 </View>
+                <View style={styles.nameContainer}>
+                    <View style={[styles.nameFields,{marginHorizontal:5}]}>
+                    <TextInput placeholder="First Name" onChangeText={setName} autoCompleteType={"name"}/>
+                    </View>
+                    <View style={[styles.nameFields,{marginHorizontal:24}]}>
+                    <TextInput placeholder="Last Name" onChangeText={setLastName}/>
+                    </View>
+                </View>
                 <View style={styles.input}>
-                    <TextInput placeholder="Address" onChangeText={setAddress} autoCompleteType={"street-address"} />
+                    <TextInput placeholder="Shipping Address" onChangeText={setAddress} autoCompleteType={"street-address"} />
                 </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -74,5 +95,13 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginHorizontal: 65
     },
+    nameContainer:{
+        flexDirection:"row",
+    },
+    nameFields:{
+        borderBottomWidth:2,
+        borderBottomColor:Colors.primary,
+        width:150
+    }
 });
 export default signup;

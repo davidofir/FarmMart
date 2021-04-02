@@ -19,7 +19,7 @@ const Login = ({navigation},props) => {
                 (cred)=>{
                     navigation.navigate("Menu",{
                         userId:cred.user.uid,
-                        email:email
+                        email:email,
                     });
             }
             );
