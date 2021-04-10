@@ -80,7 +80,8 @@ const Profile = ({route,navigation}) => {
             db.collection("users").doc(user.uid).update({shippingAddress: address});
         }
         if(passwordOK && userNameOK){
-            navigation.goBack();
+            console.log(currentPassword);
+            navigation.navigate("Menu",{password:currentPassword});
         }
     
     }
