@@ -19,8 +19,10 @@ const Profile = ({route,navigation}) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
-    let userNameOK = true;
-    let passwordOK = true;
+
+
+
+
     let currentPassword = route.params.password;
     let referenceName,referenceLastName,referenceAddress="";
 
@@ -33,34 +35,37 @@ const Profile = ({route,navigation}) => {
         referenceAddress=doc.data().shippingAddress;
     });
     const Update = async() =>{
+    var userNameOk = true;
+    var passwordOK = true;        
         try{
            const response = await await firebase.auth().signInWithEmailAndPassword(user.email,currentPassword).then(()=>{
             if(email != user.email){
-                user.updateEmail(email).then( user =>{
-                },err => {
+                user.updateEmail(email).then( () =>{
+                userNameOk = true;
+
+                }
+                ).catch((err)=>{
                     var errorFormatted = err.toString().replace("Error: ", "");
                     Alert.alert("Error", `${errorFormatted}`);
-                    userNameOK = false;
-                }
-                );
-                
+                    userNameOk=false;
+                });
 
         }
         if(password.length>0){
             if(password === confirmPassword){
                 user.updatePassword(password).then(()=>{
                     currentPassword = password;
-                    passwordOK=true;
+                    passwordOK = true;
                     console.log(currentPassword);
-                },err =>{
-                    var errorFormatted = err.toString().replace("Error: ", "");
-                    passwordOK=false;
-                    Alert.alert("Error", `${errorFormatted}`);
                 }
-                );
+                ).catch((err)=>{
+                    passwordOK = false;
+                    var errorFormatted = err.toString().replace("Error: ", "");
+                    Alert.alert("Error", `${errorFormatted}`);
+                });
 
             }else{
-                passwordOK=false;
+                passwordOK = false;
                 Alert.alert("Error","The passwords don't match");
             }
         }
@@ -79,8 +84,9 @@ const Profile = ({route,navigation}) => {
         if(referenceAddress !== address){
             db.collection("users").doc(user.uid).update({shippingAddress: address});
         }
-        if(passwordOK && userNameOK){
+        if(passwordOK && userNameOk){
             console.log(currentPassword);
+            console.log(userNameOk);
             navigation.navigate("Menu",{password:currentPassword});
         }
     

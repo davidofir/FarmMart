@@ -26,12 +26,12 @@ const signup = ({navigation},props) => {
                     firstName: name,
                     lastName: lastName,
                     shippingAddress: address,
-                    password:password
                 })
             }).then(()=>{
                 navigation.navigate("Menu",{
                     userId:userID,
                     email:email,
+                    password:password
                 });
             });
         }
