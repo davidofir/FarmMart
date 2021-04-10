@@ -6,10 +6,11 @@ import 'firebase/firestore';
 import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react/cjs/react.development';
 import ButtonComponent from '../components/ButtonComponent';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-
-const Profile = ({route}) => {
+const Profile = ({route,navigation}) => {
     const db = firebase.firestore();
     const user = firebase.auth().currentUser;
     const [email, setEmail] = useState(user.email);
@@ -18,6 +19,8 @@ const Profile = ({route}) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
+    let userNameOK = true;
+    let passwordOK = true;
     let currentPassword = route.params.password;
     let referenceName,referenceLastName,referenceAddress="";
 
@@ -37,6 +40,7 @@ const Profile = ({route}) => {
                 },err => {
                     var errorFormatted = err.toString().replace("Error: ", "");
                     Alert.alert("Error", `${errorFormatted}`);
+                    userNameOK = false;
                 }
                 );
                 
@@ -46,14 +50,17 @@ const Profile = ({route}) => {
             if(password === confirmPassword){
                 user.updatePassword(password).then(()=>{
                     currentPassword = password;
+                    passwordOK=true;
                     console.log(currentPassword);
                 },err =>{
                     var errorFormatted = err.toString().replace("Error: ", "");
+                    passwordOK=false;
                     Alert.alert("Error", `${errorFormatted}`);
                 }
                 );
 
             }else{
+                passwordOK=false;
                 Alert.alert("Error","The passwords don't match");
             }
         }
@@ -72,7 +79,9 @@ const Profile = ({route}) => {
         if(referenceAddress !== address){
             db.collection("users").doc(user.uid).update({shippingAddress: address});
         }
-
+        if(passwordOK && userNameOK){
+            navigation.goBack();
+        }
     
     }
     return (
