@@ -3,6 +3,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Icon } from 'react-native-elements'
 import * as firebase from 'firebase';
 import { LogBox } from 'react-native';
 import Menu from './pages/Menu';
@@ -33,7 +34,16 @@ export default function App() {
         <Stack.Screen name="Home" component={HomePage}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Signup" component={Signup}/>
-        <Stack.Screen name="Menu" component={Menu}/>
+        <Stack.Screen name="Menu" component={Menu} options={({route})=>({
+          headerRight: ()=>(
+          <TouchableOpacity onPress={()=>{
+            
+            console.log(route.params);
+
+          }} style={styles.editButton}>
+                <Icon name='edit' type='material' />
+            </TouchableOpacity>)
+        })}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -46,4 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent:"center",
   },
+  editButton: {
+    flexDirection: "row",
+    marginRight:8
+},
 });
