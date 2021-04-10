@@ -39,7 +39,7 @@ export default function App() {
           headerRight: ()=>(
           <TouchableOpacity onPress={()=>{
             
-            navigation.navigate("Profile");
+            navigation.navigate("Profile",{password:route.params.password});
 
           }} style={styles.editButton}>
                 <Icon name='edit' type='material' />

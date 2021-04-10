@@ -7,9 +7,9 @@ import { Icon } from 'react-native-elements'
 import ButtonComponent from '../components/ButtonComponent';
 const Menu = ({ route, navigation }) => {
     const db = firebase.firestore();
-    const { userId, email } = route.params;
+    const password = route.params.password;
     const [firstName, setFirstName] = useState("");
-    db.collection("users").doc(userId).get().then((doc) => {
+    db.collection("users").doc(firebase.auth().currentUser.uid).get().then((doc) => {
         setFirstName(doc.data().firstName);
     });
     return (

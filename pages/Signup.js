@@ -23,9 +23,10 @@ const signup = ({navigation},props) => {
                 userID = cred.user.uid;
                 console.log(cred.user.uid);
                 return db.collection('users').doc(cred.user.uid).set({
+                    firstName: name,
+                    lastName: lastName,
                     shippingAddress: address,
-                    firstName:name,
-                    lastName:lastName
+                    password:password
                 })
             }).then(()=>{
                 navigation.navigate("Menu",{

@@ -18,8 +18,7 @@ const Login = ({navigation},props) => {
             const response = await firebase.auth().signInWithEmailAndPassword(email, password).then(
                 (cred)=>{
                     navigation.navigate("Menu",{
-                        userId:cred.user.uid,
-                        email:email,
+                        password:password
                     });
             }
             );

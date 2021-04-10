@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import firebase from 'firebase';
 import Colors from "../constants/colors"
 import 'firebase/firestore';
@@ -9,7 +9,7 @@ import ButtonComponent from '../components/ButtonComponent';
 
 
 
-const Profile = () => {
+const Profile = ({route}) => {
     const db = firebase.firestore();
     const user = firebase.auth().currentUser;
     const [email, setEmail] = useState(user.email);
@@ -18,11 +18,63 @@ const Profile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
+    let currentPassword = route.params.password;
+    let referenceName,referenceLastName,referenceAddress="";
+
     db.collection("users").doc(user.uid).get().then((doc) => {
         setFirstName(doc.data().firstName);
+        referenceName=doc.data().firstName;
         setLastName(doc.data().lastName);
+        referenceLastName = doc.data().lastName;
         setAddress(doc.data().shippingAddress);
+        referenceAddress=doc.data().shippingAddress;
     });
+    const Update = async() =>{
+        try{
+           const response = await await firebase.auth().signInWithEmailAndPassword(user.email,currentPassword).then(()=>{
+            if(email != user.email){
+                user.updateEmail(email).then( user =>{
+                },err => {
+                    var errorFormatted = err.toString().replace("Error: ", "");
+                    Alert.alert("Error", `${errorFormatted}`);
+                }
+                );
+                
+
+        }
+        if(password.length>0){
+            if(password === confirmPassword){
+                user.updatePassword(password).then(()=>{
+                    currentPassword = password;
+                    console.log(currentPassword);
+                },err =>{
+                    var errorFormatted = err.toString().replace("Error: ", "");
+                    Alert.alert("Error", `${errorFormatted}`);
+                }
+                );
+
+            }else{
+                Alert.alert("Error","The passwords don't match");
+            }
+        }
+           });
+
+        }catch (err){
+            alert(err);
+        }
+
+        if(referenceName !== firstName){
+            db.collection("users").doc(user.uid).update({firstName: firstName});
+        }
+        if(referenceLastName !== lastName){
+            db.collection("users").doc(user.uid).update({lastName: lastName});
+        }        
+        if(referenceAddress !== address){
+            db.collection("users").doc(user.uid).update({shippingAddress: address});
+        }
+
+    
+    }
     return (
         <View style={styles.container}>
             <View style={styles.input}>
@@ -44,7 +96,7 @@ const Profile = () => {
             <TextInput onChangeText={setAddress} value={address} placeholder="Shipping Address"/>
             </View>
             <View style={styles.buttonContainer}>
-            <ButtonComponent clickEvent={() => console.log("blahbalh")} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Update" />
+            <ButtonComponent clickEvent={() => Update()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Update" />
             </View>
         </View>
     );
