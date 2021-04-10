@@ -26,6 +26,7 @@ import Colors from './constants/colors';
 import Signup from './pages/Signup';
 import HomePage from './pages/HomePage'
 import 'react-native-gesture-handler';
+import Profile from './pages/Profile';
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -34,16 +35,17 @@ export default function App() {
         <Stack.Screen name="Home" component={HomePage}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Signup" component={Signup}/>
-        <Stack.Screen name="Menu" component={Menu} options={({route})=>({
+        <Stack.Screen name="Menu" component={Menu} options={({route,navigation})=>({
           headerRight: ()=>(
           <TouchableOpacity onPress={()=>{
             
-            console.log(route.params);
+            navigation.navigate("Profile");
 
           }} style={styles.editButton}>
                 <Icon name='edit' type='material' />
             </TouchableOpacity>)
         })}/>
+        <Stack.Screen name="Profile" component={Profile}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
