@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import firebase from 'firebase';
+import firebase, { auth } from 'firebase';
 import Colors from "../constants/colors"
 import 'firebase/firestore';
 import { TextInput } from 'react-native-gesture-handler';
@@ -16,27 +16,26 @@ const Profile = ({route,navigation}) => {
     const [email, setEmail] = useState(user.email);
     const [password, setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [address, setAddress] = useState("");
-
-
-
-
-    let currentPassword = route.params.password;
-    let referenceName,referenceLastName,referenceAddress="";
-
+    const userRef = db.collection("users").doc(firebase.auth().currentUser.uid);
+    const [firstName,setFirstName] = useState("");
+    const [lastName,setLastName] = useState("");
+    const [address,setAddress] = useState("");
+    const currentPassword = route.params.password;
+    let referenceName,referenceLastName,referenceAddress = "";
     db.collection("users").doc(user.uid).get().then((doc) => {
-        setFirstName(doc.data().firstName);
-        referenceName=doc.data().firstName;
-        setLastName(doc.data().lastName);
+        referenceName = doc.data().firstName;
         referenceLastName = doc.data().lastName;
-        setAddress(doc.data().shippingAddress);
-        referenceAddress=doc.data().shippingAddress;
+        referenceAddress = doc.data().referenceAddress;
+
     });
-    const Update = async() =>{
+
+    let Update = async() =>{
     var userNameOk = true;
-    var passwordOK = true;        
+    var passwordOK = true;  
+    setFirstName(referenceName);
+    setLastName(referenceLastName);
+    setAddress(referenceAddress);
+
         try{
            const response = await await firebase.auth().signInWithEmailAndPassword(user.email,currentPassword).then(()=>{
             if(email != user.email){
@@ -74,19 +73,18 @@ const Profile = ({route,navigation}) => {
         }catch (err){
             alert(err);
         }
-
-        if(referenceName !== firstName){
-            db.collection("users").doc(user.uid).update({firstName: firstName});
+        console.log(referenceLastName);
+        if( referenceName !== firstName && firstName.length !== 0){
+            db.collection('users').doc(firebase.auth().currentUser.uid).update({firstName: firstName});
+            console.log("executed");
         }
-        if(referenceLastName !== lastName){
-            db.collection("users").doc(user.uid).update({lastName: lastName});
+        if(referenceLastName !== lastName && lastName.length !== 0){
+           await userRef.update({lastName: lastName});
         }        
-        if(referenceAddress !== address){
-            db.collection("users").doc(user.uid).update({shippingAddress: address});
+        if(referenceAddress !== address && address.length !== 0){
+           await userRef.update({shippingAddress:address});
         }
         if(passwordOK && userNameOk){
-            console.log(currentPassword);
-            console.log(userNameOk);
             navigation.navigate("Menu",{password:currentPassword});
         }
     
@@ -103,13 +101,13 @@ const Profile = ({route,navigation}) => {
                 <TextInput onChangeText={setConfirmPassword} secureTextEntry={true} autoCompleteType="password" placeholder="Confirm Password" />
             </View>
             <View style={styles.input}>
-            <TextInput onChangeText={setFirstName} value={firstName} placeholder="First Name"/>
+            <TextInput onChangeText={setFirstName} value={referenceName} placeholder="First Name"/>
             </View>
             <View style={styles.input}>
-            <TextInput onChangeText={setLastName} value={lastName} placeholder="Last Name"/>
+            <TextInput onChangeText={setLastName} value={referenceLastName} placeholder="Last Name"/>
             </View>
             <View style={styles.input}>
-            <TextInput onChangeText={setAddress} value={address} placeholder="Shipping Address"/>
+            <TextInput onChangeText={setAddress} placeholder="Shipping Address"/>
             </View>
             <View style={styles.buttonContainer}>
             <ButtonComponent clickEvent={() => Update()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Update" />
