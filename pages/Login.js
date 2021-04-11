@@ -46,7 +46,6 @@ const Login = ({navigation},props) => {
             </View>
             <View style={styles.buttonContainer}>
                 <ButtonComponent clickEvent={() => signIn()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Submit" />
-                <Checkbox label="Keep me logged in" />
             </View>
         </View>
 

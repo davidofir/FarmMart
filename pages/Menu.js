@@ -16,13 +16,13 @@ const Menu = ({ route, navigation }) => {
         <View style={styles.container}>
             <View style={styles.textContainer}>
                     <Text style={{fontSize:20}}>Welcome, {firstName}</Text>
-
             </View>
-            
             <View style={styles.buttonContainer}>
                 <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Browse Stores" />
+                <ButtonComponent background={Colors.secondary} textColor={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Create Store" />
                 </View>
             </View>
+            
             
     );
 };
@@ -42,9 +42,8 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flex: 1,
-
-        justifyContent: "center",
-        marginHorizontal: 25,
+        justifyContent: "space-evenly",
+        marginHorizontal: 5,
     },
     textContainer:{
         margin: 8,
