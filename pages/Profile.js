@@ -91,7 +91,7 @@ const Profile = ({route,navigation}) => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.input}>
+            <View style={[styles.input,{marginTop:60}]}>
                 <TextInput onChangeText={setEmail} value={email} placeholder="Email"/>
             </View>
             <View style={styles.input}>
