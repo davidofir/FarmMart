@@ -6,12 +6,14 @@ import 'react-native-gesture-handler';
 import ButtonComponent from '../components/ButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { Icon } from 'react-native-elements'
 const AddStore = () => {
     const [storeName, setStoreName] = useState("");
     const [item, setItem] = useState("");
     const [price, setPrice] = useState(0);
     const [qty,setQty] = useState(0);
+    const [selectedIndex,setSelectedIndex] = useState(2);
     return (
         <View style={styles.container}>
             <View style={styles.input}>
@@ -25,7 +27,7 @@ const AddStore = () => {
                 <View style={styles.itemsInput}>
                     <TextInput placeholder="Price" onChangeText={setPrice} keyboardType="numeric"/>
                 </View>
-                <View style={styles.itemsInput}>
+                <View style={[styles.itemsInput,{width:70}]}>
                     <TextInput placeholder="Quantity" onChangeText={setQty}/>
                 </View>
                 <View>
@@ -33,6 +35,10 @@ const AddStore = () => {
                     <Icon name='add' type='material' />
                     </TouchableOpacity>
                 </View>
+                </View>
+                <View style={styles.qtyContainer}>
+                    <Text>Per Unit</Text>
+                    <SegmentedControl tintColor={Colors.primary} onChange={(event)=>{setSelectedIndex(event.nativeEvent.selectedSegmentIndex)}} backgroundColor={Colors.secondary} fontStyle={{color:"black"}} values={['Kilos','Pounds','Liters','Gallons']} selectedIndex={selectedIndex}/>
                 </View>
             </View>
         </View>
@@ -57,13 +63,16 @@ const styles = StyleSheet.create({
         padding: 5,
         borderBottomWidth: 2,
         borderBottomColor: Colors.primary,
-        marginHorizontal:15
+        marginHorizontal:11
 
     },
     addItems:{
         flexDirection:"row",
         alignItems:"center",
 
+    },
+    qtyContainer:{
+        margin:20
     }
 });
 export default AddStore;
