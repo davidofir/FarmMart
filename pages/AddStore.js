@@ -17,7 +17,7 @@ const AddStore = () => {
     const [selectedIndex, setSelectedIndex] = useState(2);
     const [itemsList,setItemsList] = useState([]);
     const [itemID,setItemID]=useState(0);
-    const [selectedUnitName,setSelectedUnitName] = useState("");
+    const [selectedUnitName,setSelectedUnitName] = useState("Liters");
     const RenderedItem = ({name,price,qty,unit}) =>(
             <View style={styles.itemsComponent}>
                 <View>
@@ -27,7 +27,7 @@ const AddStore = () => {
                 </View>
                 <View style={{marginHorizontal:2}}>
                     <Text>
-                    {price}$ per {qty} {unit}
+                    ${price} per {qty} {unit}
                     </Text>
                 </View>
         </View>
