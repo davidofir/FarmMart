@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Colors from '../constants/colors';
 import Login from './Login';
+import * as Location from 'expo-location';
 import 'react-native-gesture-handler';
 import ButtonComponent from '../components/ButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,7 +10,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { Icon } from 'react-native-elements'
 import { FlatList } from 'react-native-gesture-handler';
-const AddStore = () => {
+import firebase, { auth } from 'firebase';
+const AddStore = ({navigation}) => {
+    const db = firebase.firestore();
     const [storeName, setStoreName] = useState("");
     const [itemName, setItemName] = useState("");
     const [price, setPrice] = useState(0);
@@ -17,6 +20,9 @@ const AddStore = () => {
     const [selectedIndex, setSelectedIndex] = useState(2);
     const [itemsList,setItemsList] = useState([]);
     const [itemID,setItemID]=useState(0);
+    const [resLocation,setResLocation] = useState(null);
+    const [address,setAddress] = useState("");
+    const [error,setError] = useState("");
     const [selectedUnitName,setSelectedUnitName] = useState("Liters");
     const RenderedItem = ({name,price,qty,unit}) =>(
             <View style={styles.itemsComponent}>
@@ -31,13 +37,47 @@ const AddStore = () => {
                     </Text>
                 </View>
         </View>
-    );  
+    );
+    const createStore = async()=>{
+        let {status} = await Location.requestPermissionsAsync();
+        try{
+        let result = Location.geocodeAsync(address)
+        setResLocation(result);
+        const res = JSON.stringify(resLocation);
+        var stringify = JSON.parse(res);
+        var lat = stringify._W[0].latitude;
+        var long = stringify._W[0].longitude;
+        console.log(`Long ${long} and lat ${lat}`);
+        db.collection('stores').doc(auth().currentUser.uid).set({
+            name:storeName,
+            products:itemsList,
+            address:address,
+            long:long,
+            lat:lat
+            
+        }).then(()=>{
+            navigation.navigate("Menu");
+        })
+        }
+        catch(err){
+            setError(err);
+            var errorFormatted = err.toString().replace("Error: ", "");
+            Alert.alert("Error", `${errorFormatted}`);
+            console.log(error);
+        }
+    }
     return (
 
         <View style={styles.container}>
             <View style={styles.input}>
                 <TextInput placeholder="Store Name" onChangeText={setStoreName} />
             </View>
+            <View style={styles.input}>
+                    <TextInput placeholder="Store Address" onChangeText={setAddress}/>
+                </View>
+                <View style={{marginVertical:10}}>
+                    <Text>Store Products</Text>
+                </View>
             <FlatList data={itemsList} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
             <View>
                 <View style={styles.addItems}>
@@ -74,9 +114,10 @@ const AddStore = () => {
                     </View>
                     <SegmentedControl tintColor={Colors.primary} onChange={(event) => { setSelectedIndex(event.nativeEvent.selectedSegmentIndex); setSelectedUnitName(event.nativeEvent.value); }} backgroundColor={Colors.secondary} fontStyle={{ color: "black" }} values={['Kilos', 'LB', 'Liters', 'Gallons']} selectedIndex={selectedIndex} />
                 </View>
+
             </View>
             <View style={styles.saveButton}>
-                <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Save" />
+                <ButtonComponent clickEvent={createStore} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Save" />
             </View>
         </View>
     )
