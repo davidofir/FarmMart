@@ -4,6 +4,7 @@ import Colors from '../constants/colors';
 import ButtonComponent from '../components/ButtonComponent';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import * as Location from 'expo-location';
 import 'react-native-gesture-handler';
 
 const signup = ({navigation},props) => {
@@ -14,26 +15,47 @@ const signup = ({navigation},props) => {
     const [address, setAddress] = useState("");
     const [error, setError] = useState("");
     const [name,setName] = useState("");
+    const [resLocation,setResLocation] = useState(null);
     const [lastName, setLastName] = useState("");
     var userID = "";
     const SignupAction = async () => {
+        let long,lat;
         try {
             setError("");
-            const response = await firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
-                userID = cred.user.uid;
-                console.log(cred.user.uid);
-                return db.collection('users').doc(cred.user.uid).set({
-                    firstName: name,
-                    lastName: lastName,
-                    shippingAddress: address,
-                })
-            }).then(()=>{
-                navigation.navigate("Menu",{
-                    userId:userID,
-                    email:email,
-                    password:password
-                });
-            });
+            Location.requestPermissionsAsync().then(
+                Location.geocodeAsync(address).then(
+                    res=>{
+                        setResLocation(res);
+                        lat = resLocation[0].latitude;
+                        long = resLocation[0].longitude;
+                        console.log(`Long ${long} and lat ${lat}`);
+                    }
+                ).then( ()=>
+                    firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
+                            userID = cred.user.uid;
+                            console.log(cred.user.uid);
+                            return db.collection('users').doc(cred.user.uid).set({
+                                firstName: name,
+                                lastName: lastName,
+                                shippingAddress: address,
+                                long:long,
+                                lat:lat
+                            })
+                        }).then(()=>{
+                            navigation.navigate("Menu",{
+                                userId:userID,
+                                email:email,
+                                password:password
+                            });
+                        }) 
+                    
+                ).catch(
+                    ()=>{
+                        Alert.alert("Error","Invalid location, please try again");
+                    }
+                )
+            );
+
         }
         catch (err) {
             setError(err);

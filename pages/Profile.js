@@ -8,7 +8,7 @@ import { useState } from 'react/cjs/react.development';
 import ButtonComponent from '../components/ButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import * as Location from 'expo-location';
 
 const Profile = ({route,navigation}) => {
     const db = firebase.firestore();
@@ -19,6 +19,8 @@ const Profile = ({route,navigation}) => {
     const userRef = db.collection("users").doc(firebase.auth().currentUser.uid);
     const [firstName,setFirstName] = useState("");
     const [lastName,setLastName] = useState("");
+    const [resLocation,setResLocation] = useState(null);
+    const [error, setError] = useState("");
     const [address,setAddress] = useState("");
     const currentPassword = route.params.password;
     let referenceName,referenceLastName,referenceAddress = "";
@@ -30,6 +32,7 @@ const Profile = ({route,navigation}) => {
     });
 
     let Update = async() =>{
+    let lat,long;
     var userNameOk = true;
     var passwordOK = true;  
     setFirstName(referenceName);
@@ -82,11 +85,39 @@ const Profile = ({route,navigation}) => {
            await userRef.update({lastName: lastName});
         }        
         if(referenceAddress !== address && address.length !== 0){
-           await userRef.update({shippingAddress:address});
+            try{
+                Location.requestPermissionsAsync().then(
+                    Location.geocodeAsync(address).then(
+                        res=>{
+                            
+                            setResLocation(res);
+                            lat = resLocation[0].latitude;
+                            long = resLocation[0].longitude;
+                            
+
+                        }
+                    ).catch(
+                        ()=>{
+                            Alert.alert("Error","Invalid location, please try again");
+                        }  
+                    )
+                    .then(()=>{
+                        userRef.update({shippingAddress:address,lat:lat,long:long})
+                    }
+                    )
+                )
+                //await userRef.update({shippingAddress:address});
         }
-        if(passwordOK && userNameOk){
-            navigation.navigate("Menu",{password:currentPassword});
+        catch (err) {
+            setError(err);
+            var errorFormatted = err.toString().replace("Error: ", "");
+            Alert.alert("Error", `${errorFormatted}`);
+            console.log(error);
         }
+        }
+        // if(passwordOK && userNameOk){
+        //     navigation.navigate("Menu",{password:currentPassword});
+        // }
     
     }
     return (
