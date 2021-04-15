@@ -39,25 +39,36 @@ const AddStore = ({navigation}) => {
         </View>
     );
     const createStore = async()=>{
+        let long,lat;
         let {status} = await Location.requestPermissionsAsync();
         try{
-        let result = Location.geocodeAsync(address)
-        setResLocation(result);
-        const res = JSON.stringify(resLocation);
-        var stringify = JSON.parse(res);
-        var lat = stringify._W[0].latitude;
-        var long = stringify._W[0].longitude;
-        console.log(`Long ${long} and lat ${lat}`);
-        db.collection('stores').doc(auth().currentUser.uid).set({
-            name:storeName,
-            products:itemsList,
-            address:address,
-            long:long,
-            lat:lat
+        let result = Location.geocodeAsync(address).then(
+            (res)=>{
+                setResLocation(res);
+                lat = resLocation[0].latitude;
+                long = resLocation[0].longitude;
+                console.log(`Long ${long} and lat ${lat}`);
+            }
             
-        }).then(()=>{
-            navigation.navigate("Menu");
+        ).then(()=>{
+            return db.collection('stores').doc(auth().currentUser.uid).set({
+                name:storeName,
+                products:itemsList,
+                address:address,
+                long:long,
+                lat:lat
+               
+            }).then(()=>{
+                navigation.navigate("Menu");
+            })
         })
+        .catch(
+            ()=>{
+                Alert.alert("Error","Invalid location, please try again");
+            }
+        )
+
+
         }
         catch(err){
             setError(err);
