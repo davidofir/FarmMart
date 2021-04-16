@@ -34,7 +34,8 @@ const Profile = ({route,navigation}) => {
     let Update = async() =>{
     let lat,long;
     var userNameOk = true;
-    var passwordOK = true;  
+    var passwordOK = true;
+    var locationOK = true;  
     setFirstName(referenceName);
     setLastName(referenceLastName);
     setAddress(referenceAddress);
@@ -98,10 +99,12 @@ const Profile = ({route,navigation}) => {
                         }
                     ).catch(
                         ()=>{
+                            locationOK = false;
                             Alert.alert("Error","Invalid location, please try again");
                         }  
                     )
                     .then(()=>{
+                        locationOK = true;
                         console.log(`Long ${long} and lat ${lat}`);
                         userRef.update({shippingAddress:address,lat:lat,long:long})
                     }
@@ -116,7 +119,7 @@ const Profile = ({route,navigation}) => {
             console.log(error);
         }
         }
-        if(passwordOK && userNameOk){
+        if(passwordOK && userNameOk && locationOK){
             navigation.navigate("Menu",{password:currentPassword});
         }
     
