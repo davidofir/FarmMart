@@ -92,8 +92,10 @@ const Profile = ({route,navigation}) => {
                         res=>{
                             
                             setResLocation(res);
-                            lat = resLocation[0].latitude;
-                            long = resLocation[0].longitude;
+                            console.log(res);
+                            lat = res[0].latitude;
+                            long = res[0].longitude;
+                            //console.log(`Long ${long} and lat ${lat}`);
                             
 
                         }
@@ -104,9 +106,9 @@ const Profile = ({route,navigation}) => {
                         }  
                     )
                     .then(()=>{
-                        locationOK = true;
-                        console.log(`Long ${long} and lat ${lat}`);
+
                         userRef.update({shippingAddress:address,lat:lat,long:long})
+                        locationOK = true;                        
                     }
                     )
                 )
