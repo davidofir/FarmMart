@@ -102,6 +102,7 @@ const Profile = ({route,navigation}) => {
                         }  
                     )
                     .then(()=>{
+                        console.log(`Long ${long} and lat ${lat}`);
                         userRef.update({shippingAddress:address,lat:lat,long:long})
                     }
                     )
@@ -115,9 +116,9 @@ const Profile = ({route,navigation}) => {
             console.log(error);
         }
         }
-        // if(passwordOK && userNameOk){
-        //     navigation.navigate("Menu",{password:currentPassword});
-        // }
+        if(passwordOK && userNameOk){
+            navigation.navigate("Menu",{password:currentPassword});
+        }
     
     }
     return (
