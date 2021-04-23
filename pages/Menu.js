@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import Colors from "../constants/colors";
 import AddStore from './AddStore';
+import BrowseStores from './BrowseStores';
 import 'firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,7 +22,7 @@ const Menu = ({ route, navigation }) => {
                     <Text style={{fontSize:20}}>Welcome, {firstName}</Text>
             </View>
             <View style={styles.buttonContainer}>
-                <ButtonComponent background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Browse Stores" />
+                <ButtonComponent clickEvent={()=>navigation.navigate("BrowseStores")} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Browse Stores" />
                 <ButtonComponent clickEvent={()=>navigation.navigate("AddStore")} background={Colors.secondary} textColor={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Add a Store" />
                 </View>
             </View>
