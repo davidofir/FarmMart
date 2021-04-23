@@ -17,10 +17,11 @@ const BrowseStores = ({Navigation,route})=>{
     const [mapRegion,setMapRegion] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const db = firebase.firestore();
     // const [stores,setStores] = useState([]);
-    const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
+    const location=route.params.currentLocation;
     const [errorMsg, setErrorMsg] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const stores = route.params.stores;
     const [markers,setMarkers] = useState([]);
+    let currentLocation;
     const RenderedItem = ({name,price,qty,unit}) =>(
         <View style={styles.itemsComponent}>
             <View>
@@ -32,33 +33,7 @@ const BrowseStores = ({Navigation,route})=>{
 );
     useEffect(() => {
       (async () => {
-          try{
-        let { status } = Location.requestPermissionsAsync().then(
-           ()=>{
-               let currentLocation = Location.getCurrentPositionAsync({}).then(
-                    (cur)=>{setLocation(
-                        {
-                            longitude:cur.coords.longitude,
-                            latitude:cur.coords.latitude,
-                            latitudeDelta:0.0922,
-                            longitudeDelta:0.0421
-                        }
-                    )}
-                )
-           }
-                
-        ).catch(
-            ()=>setErrorMsg('Permission to access location was denied')
-        );
-        
-    }
-    catch (err) {
-        setErrorMsg(err);
-        var errorFormatted = err;
-        Alert.alert("Error", `${errorFormatted}`);
-        console.log(error);
-    }
-
+          console.log(location);
 
       })();
     },[]);
@@ -72,8 +47,8 @@ const BrowseStores = ({Navigation,route})=>{
 
     return (
         <View>
-            <MapView initialRegion={location} style={styles.map}>
-                <Marker title="Me" coordinate={location}>
+            <MapView initialRegion={route.params.currentLocation} style={styles.map}>
+                <Marker title="Me" coordinate={route.params.currentLocation}>
                 <View style={styles.circle}>
               <View style={styles.core} />
               <View style={styles.stroke} />

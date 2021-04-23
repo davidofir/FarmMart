@@ -15,6 +15,8 @@ const Menu = ({ route, navigation }) => {
     const db = firebase.firestore();
     const password = route.params.password;
     const [firstName, setFirstName] = useState("");
+    const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
+    let currentLocation;
     db.collection("users").doc(firebase.auth().currentUser.uid).get().then((doc) => {
         setFirstName(doc.data().firstName);
     });
@@ -34,8 +36,42 @@ const Menu = ({ route, navigation }) => {
                             })
                         }
                     ).then(
+
+                        ()=>{
+                            try{
+                                let { status } = Location.requestPermissionsAsync().then(
+                                   ()=>{
+                                        currentLocation = Location.getCurrentPositionAsync({}).then(
+                                            (cur)=>{setLocation(
+                                                {
+                                                    longitude:cur.coords.longitude,
+                                                    latitude:cur.coords.latitude,
+                                                    latitudeDelta:0.0922,
+                                                    longitudeDelta:0.0421
+                                                }
+                                            )}
+                                        )
+                                   }
+                                        
+                                ).catch(
+                                    ()=>setErrorMsg('Permission to access location was denied')
+                                );
+                                
+                            }
+                            catch (err) {
+                                setErrorMsg(err);
+                                var errorFormatted = err;
+                                Alert.alert("Error", `${errorFormatted}`);
+                                console.log(error);
+                            }
+                        }
+                    )
+                    
+                    
+                    .then(
                         ()=>navigation.navigate("BrowseStores",{
-                            stores:stores
+                            stores:stores,
+                            currentLocation:location
                         })
                     )
 
