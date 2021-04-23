@@ -31,13 +31,7 @@ const BrowseStores = ({Navigation,route})=>{
     </View>
 );
 
-  
-    let text = 'Waiting..';
-    if (errorMsg) {
-      text = errorMsg;
-    } else if (location) {
-      text = JSON.stringify(location);
-    }
+
 
     return (
         <View>

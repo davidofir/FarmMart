@@ -16,9 +16,9 @@ const Menu = ({ route, navigation }) => {
     const db = firebase.firestore();
     const password = route.params.password;
     const [firstName, setFirstName] = useState("");
+    const [errorMsg, setErrorMsg] = useState(null);
     const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     let currentLocation;
-    const [errorMsg, setErrorMsg] = useState(null);
     db.collection("users").doc(firebase.auth().currentUser.uid).get().then((doc) => {
         setFirstName(doc.data().firstName);
     });
@@ -49,7 +49,6 @@ const Menu = ({ route, navigation }) => {
                 setErrorMsg(err);
                 var errorFormatted = err;
                 Alert.alert("Error", `${errorFormatted}`);
-                console.log(error);
             }
   
         })();
