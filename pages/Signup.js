@@ -59,8 +59,7 @@ const signup = ({navigation},props) => {
         }
         catch (err) {
             setError(err);
-            var errorFormatted = err.toString().replace("Error: ", "");
-            Alert.alert("Error", `${errorFormatted}`);
+            Alert.alert("Error", `${err}`);
             console.log(error);
         }
     }

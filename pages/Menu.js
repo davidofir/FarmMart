@@ -11,15 +11,51 @@ import * as Location from 'expo-location';
 
 import { Icon } from 'react-native-elements'
 import ButtonComponent from '../components/ButtonComponent';
+import { useEffect } from 'react/cjs/react.development';
 const Menu = ({ route, navigation }) => {
     const db = firebase.firestore();
     const password = route.params.password;
     const [firstName, setFirstName] = useState("");
     const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     let currentLocation;
+    const [errorMsg, setErrorMsg] = useState(null);
     db.collection("users").doc(firebase.auth().currentUser.uid).get().then((doc) => {
         setFirstName(doc.data().firstName);
     });
+
+    useEffect(() => {
+        (async () => {
+            try{
+                let { status } = Location.requestPermissionsAsync().then(
+                   ()=>{
+                        currentLocation = Location.getCurrentPositionAsync({}).then(
+                            (cur)=>{setLocation(
+                                {
+                                    longitude:cur.coords.longitude,
+                                    latitude:cur.coords.latitude,
+                                    latitudeDelta:0.0922,
+                                    longitudeDelta:0.0421
+                                }
+                            )}
+                        )
+                   }
+                        
+                ).catch(
+                    ()=>setErrorMsg('Permission to access location was denied')
+                );
+                
+            }
+            catch (err) {
+                setErrorMsg(err);
+                var errorFormatted = err;
+                Alert.alert("Error", `${errorFormatted}`);
+                console.log(error);
+            }
+  
+        })();
+      },[]);
+
+
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -34,36 +70,6 @@ const Menu = ({ route, navigation }) => {
                             snapshot.docs.forEach(doc=>{
                                 stores.push(doc.data());
                             })
-                        }
-                    ).then(
-
-                        ()=>{
-                            try{
-                                let { status } = Location.requestPermissionsAsync().then(
-                                   ()=>{
-                                        currentLocation = Location.getCurrentPositionAsync({}).then(
-                                            (cur)=>{setLocation(
-                                                {
-                                                    longitude:cur.coords.longitude,
-                                                    latitude:cur.coords.latitude,
-                                                    latitudeDelta:0.0922,
-                                                    longitudeDelta:0.0421
-                                                }
-                                            )}
-                                        )
-                                   }
-                                        
-                                ).catch(
-                                    ()=>setErrorMsg('Permission to access location was denied')
-                                );
-                                
-                            }
-                            catch (err) {
-                                setErrorMsg(err);
-                                var errorFormatted = err;
-                                Alert.alert("Error", `${errorFormatted}`);
-                                console.log(error);
-                            }
                         }
                     )
                     

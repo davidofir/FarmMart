@@ -18,10 +18,9 @@ const BrowseStores = ({Navigation,route})=>{
     const db = firebase.firestore();
     // const [stores,setStores] = useState([]);
     const location=route.params.currentLocation;
-    const [errorMsg, setErrorMsg] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
+
     const stores = route.params.stores;
     const [markers,setMarkers] = useState([]);
-    let currentLocation;
     const RenderedItem = ({name,price,qty,unit}) =>(
         <View style={styles.itemsComponent}>
             <View>
@@ -31,12 +30,7 @@ const BrowseStores = ({Navigation,route})=>{
             </View>
     </View>
 );
-    useEffect(() => {
-      (async () => {
-          console.log(location);
 
-      })();
-    },[]);
   
     let text = 'Waiting..';
     if (errorMsg) {
@@ -56,6 +50,18 @@ const BrowseStores = ({Navigation,route})=>{
                 </Marker>
                 {stores.map((store,index)=>(
                 <Marker key={index} coordinate={{latitude:store.lat,longitude:store.long}} title={store.name} description={store.address}>
+                    {route.params.location ? (
+                    <Circle
+                        center={{
+                        longitude: route.params.location.longitude,
+                        latitude: route.params.location.latitude
+                        }}
+                        radius={1000}
+                        strokeColor="transparent"
+                        fillColor="rgba(255,0,0,0.3)"
+                    ></Circle>
+                    ) : null}
+                    
                     <Callout>
                         <View>
                             <Text>{store.name}</Text>
