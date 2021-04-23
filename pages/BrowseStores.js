@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { Platform,Button, Dimensions, StyleSheet, Text, View,Alert } from 'react-native';
 import Colors from '../constants/colors';
-import MapView,{Marker} from 'react-native-maps';
+import MapView,{Marker,Circle} from 'react-native-maps';
 import Login from './Login';
 import 'react-native-gesture-handler';
 import ButtonComponent from '../components/ButtonComponent';
@@ -60,20 +60,18 @@ const BrowseStores = ({Navigation,route})=>{
       text = JSON.stringify(location);
     }
 
-    // db.collection("stores").get().then(
-    //     (snapshot)=>{
-    //         snapshot.docs.forEach(doc=>{
-    //             setStores([...stores,doc.data()]);
-    //         })
-    //     }
-    // )
-    // console.log(stores);
     return (
         <View>
             <MapView initialRegion={location} style={styles.map}>
-                <Marker title="Me" coordinate={location}></Marker>
+                <Marker title="Me" coordinate={location}>
+                <View style={styles.circle}>
+              <View style={styles.core} />
+              <View style={styles.stroke} />
+            </View>
+                </Marker>
                 {stores.map((store,index)=>(
-                <Marker coordinate={{latitude:store.lat,longitude:store.long}}></Marker>
+                <Marker key={index} coordinate={{latitude:store.lat,longitude:store.long}} title={store.name} description={store.address}>
+                </Marker>
                 ))}
             </MapView>
         </View>
@@ -84,7 +82,31 @@ const styles = StyleSheet.create({
     map:{
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
-    }
+    },
+    circle: {
+        width: 26,
+        height: 26,
+        borderRadius: 50
+      },
+      core: {
+        backgroundColor: "red",
+        width: 24,
+        position: "absolute",
+        top: 1,
+        left: 1,
+        right: 1,
+        bottom: 1,
+        height: 24,
+        borderRadius: 50,
+        zIndex: 2
+      },
+      stroke: {
+        backgroundColor: "#ffffff",
+        borderRadius: 50,
+        width: "100%",
+        height: "100%",
+        zIndex: 1
+      }
 });
 
 export default BrowseStores;
