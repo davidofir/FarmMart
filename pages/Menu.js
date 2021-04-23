@@ -22,7 +22,21 @@ const Menu = ({ route, navigation }) => {
                     <Text style={{fontSize:20}}>Welcome, {firstName}</Text>
             </View>
             <View style={styles.buttonContainer}>
-                <ButtonComponent clickEvent={()=>navigation.navigate("BrowseStores")} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Browse Stores" />
+                <ButtonComponent clickEvent={async()=>{
+                    const stores = [];
+                    db.collection("stores").get().then(
+                        (snapshot)=>{
+                            snapshot.docs.forEach(doc=>{
+                                stores.push(doc.data());
+                            })
+                        }
+                    ).then(
+                        ()=>navigation.navigate("BrowseStores",{
+                            stores:stores
+                        })
+                    )
+
+            }} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Browse Stores" />
                 <ButtonComponent clickEvent={()=>navigation.navigate("AddStore")} background={Colors.secondary} textColor={Colors.primary} borderColorStyle={Colors.primary} buttonTitle="Add a Store" />
                 </View>
             </View>
