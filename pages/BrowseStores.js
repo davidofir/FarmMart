@@ -5,19 +5,20 @@ import MapView,{Marker} from 'react-native-maps';
 import Login from './Login';
 import 'react-native-gesture-handler';
 import ButtonComponent from '../components/ButtonComponent';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import * as Location from 'expo-location';
 import { useState } from 'react/cjs/react.development';
-const BrowseStores = ({Navigation})=>{
+const BrowseStores = ({Navigation,route})=>{
     const [mapRegion,setMapRegion] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const db = firebase.firestore();
-    const [stores,setStores] = useState([]);
+    // const [stores,setStores] = useState([]);
     const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const [errorMsg, setErrorMsg] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
+    const stores = route.params.stores;
     const [markers,setMarkers] = useState([]);
     useEffect(() => {
       (async () => {
@@ -33,28 +34,13 @@ const BrowseStores = ({Navigation})=>{
                             longitudeDelta:0.0421
                         }
                     )}
-               ).then(
-                   ()=>{
-                        db.collection("stores").get().then(
-                            (snapshot)=>{
-                                snapshot.docs.forEach(doc=>{
-                                    setStores([...stores,doc.data()]);
-                                })
-                            }
-                        ).then(
-                            ()=>{
-                               setMarkers( [...markers,stores.map(store=><Marker coordinate={{latitude:store.lat,longitude:store.long}}></Marker>)])
-                            }
-                        )
-                   }
-               );
+                )
            }
                 
         ).catch(
             ()=>setErrorMsg('Permission to access location was denied')
         );
         
-    
     }
     catch (err) {
         setErrorMsg(err);
@@ -65,7 +51,7 @@ const BrowseStores = ({Navigation})=>{
 
 
       })();
-    }, []);
+    },[]);
   
     let text = 'Waiting..';
     if (errorMsg) {
@@ -73,7 +59,6 @@ const BrowseStores = ({Navigation})=>{
     } else if (location) {
       text = JSON.stringify(location);
     }
-
 
     // db.collection("stores").get().then(
     //     (snapshot)=>{
@@ -86,8 +71,10 @@ const BrowseStores = ({Navigation})=>{
     return (
         <View>
             <MapView initialRegion={location} style={styles.map}>
-                <Marker coordinate={location}></Marker>
-                    {markers}
+                <Marker title="Me" coordinate={location}></Marker>
+                {stores.map((store,index)=>(
+                <Marker coordinate={{latitude:store.lat,longitude:store.long}}></Marker>
+                ))}
             </MapView>
         </View>
     );
