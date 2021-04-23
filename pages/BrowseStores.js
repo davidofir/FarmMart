@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { Platform,Button, Dimensions, StyleSheet, Text, View,Alert } from 'react-native';
 import Colors from '../constants/colors';
-import MapView,{Marker,Circle} from 'react-native-maps';
+import MapView,{Marker,Circle, Callout} from 'react-native-maps';
 import Login from './Login';
 import 'react-native-gesture-handler';
 import ButtonComponent from '../components/ButtonComponent';
@@ -12,6 +12,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import * as Location from 'expo-location';
 import { useState } from 'react/cjs/react.development';
+import { FlatList } from 'react-native-gesture-handler';
 const BrowseStores = ({Navigation,route})=>{
     const [mapRegion,setMapRegion] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const db = firebase.firestore();
@@ -20,6 +21,15 @@ const BrowseStores = ({Navigation,route})=>{
     const [errorMsg, setErrorMsg] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const stores = route.params.stores;
     const [markers,setMarkers] = useState([]);
+    const RenderedItem = ({name,price,qty,unit}) =>(
+        <View style={styles.itemsComponent}>
+            <View>
+                <Text>
+                    {name} ${price} per {qty} {unit}
+                </Text>
+            </View>
+    </View>
+);
     useEffect(() => {
       (async () => {
           try{
@@ -71,6 +81,15 @@ const BrowseStores = ({Navigation,route})=>{
                 </Marker>
                 {stores.map((store,index)=>(
                 <Marker key={index} coordinate={{latitude:store.lat,longitude:store.long}} title={store.name} description={store.address}>
+                    <Callout>
+                        <View>
+                            <Text>{store.name}</Text>
+                            <View>
+                            <FlatList data={store.products} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
+                            </View>
+                            <Text>{store.address}</Text>
+                        </View>
+                    </Callout>
                 </Marker>
                 ))}
             </MapView>

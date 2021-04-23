@@ -7,6 +7,8 @@ import BrowseStores from './BrowseStores';
 import 'firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Location from 'expo-location';
+
 import { Icon } from 'react-native-elements'
 import ButtonComponent from '../components/ButtonComponent';
 const Menu = ({ route, navigation }) => {
@@ -23,6 +25,7 @@ const Menu = ({ route, navigation }) => {
             </View>
             <View style={styles.buttonContainer}>
                 <ButtonComponent clickEvent={async()=>{
+                    
                     const stores = [];
                     db.collection("stores").get().then(
                         (snapshot)=>{
