@@ -24,6 +24,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import Login from './pages/Login'
 import Colors from './constants/colors';
 import Signup from './pages/Signup';
+import Inbox from './pages/Inbox';
 import HomePage from './pages/HomePage'
 import 'react-native-gesture-handler';
 import Profile from './pages/Profile';
@@ -49,7 +50,9 @@ export default function App() {
                 <Icon name='edit' type='material' />
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>{
-                console.log(route.params.user);
+                navigation.navigate("Inbox",{
+                  user:route.params.user
+                })
               }} style={styles.editButton}>
                 {
                   (route.params.user.inbox == undefined || route.params.user.inbox.length == 0 ) ? (<Icon name='notifications-none' type='material' />) : <Icon name='notifications-active' type='material' />
@@ -62,6 +65,7 @@ export default function App() {
         <Stack.Screen name="AddStore" component={AddStore} />
         <Stack.Screen name="BrowseStores" component={BrowseStores} />
         <Stack.Screen name="Email" component={Email} />
+        <Stack.Screen name="Inbox" component={Inbox}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
