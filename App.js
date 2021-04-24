@@ -29,6 +29,7 @@ import 'react-native-gesture-handler';
 import Profile from './pages/Profile';
 import AddStore from './pages/AddStore';
 import BrowseStores from './pages/BrowseStores';
+import Email from './pages/Email';
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile}/>
         <Stack.Screen name="AddStore" component={AddStore}/>
         <Stack.Screen name="BrowseStores" component={BrowseStores}/>
+        <Stack.Screen name="Email" component={Email}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
