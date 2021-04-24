@@ -11,14 +11,14 @@ import ButtonComponent from '../components/ButtonComponent';
 import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react/cjs/react.development';
 
-const Email = ({route,navigation})=>{
+const Reply = ({route,navigation})=>{
     const db = firebase.firestore();
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     return(
         <View style={styles.container}>
             <Text style={{marginVertical:20}}>
-                Contact {route.params.store.store.name}
+                Reply
             </Text>
             <View style={styles.input}>
                 <TextInput onChangeText={setTitle} placeholder="Title"/>
@@ -30,18 +30,20 @@ const Email = ({route,navigation})=>{
                 <ButtonComponent clickEvent={async()=>{
                     
                     if(title.length !== 0 && description !== 0 ){
-                    db.collection("users").doc(route.params.store.id).get().then(user=>{
+                    db.collection("users").doc(route.params.user.id).get().then(user=>{
                         if(user.data().inbox === undefined){
                             const inbox = [{senderID:firebase.auth().currentUser.uid,title:title,description:description}];
-                            db.collection('users').doc(route.params.store.id).update({inbox: inbox});
+                            db.collection('users').doc(route.params.user.id).update({inbox: inbox});
                         }else if(user.data().inbox.length>0){
                             const tmpEmail = user.data().inbox;
                             tmpEmail.push({senderID:firebase.auth().currentUser.uid,title:title,description:description})
-                            db.collection('users').doc(route.params.store.id).update({inbox:tmpEmail});
+                            db.collection('users').doc(route.params.user.id).update({inbox:tmpEmail});
                         }
                     }                   
                     ).then(
-                        ()=>navigation.goBack()
+                        ()=>{
+                            navigation.goBack();
+                        }
                     )
                 }else{
                         Alert.alert("Error","Both Fields must contain input");
@@ -92,4 +94,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Email
+export default Reply

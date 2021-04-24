@@ -17,7 +17,6 @@ import { FlatList } from 'react-native-gesture-handler';
 const BrowseStores = ({route,navigation})=>{
     const [mapRegion,setMapRegion] = useState({longitude:0,latitude:0,longitudeDelta: 0.0922,latitudeDelta: 0.0421});
     const db = firebase.firestore();
-    // const [stores,setStores] = useState([]);
     const location=route.params.currentLocation;
 
     const stores = route.params.stores;
@@ -68,7 +67,12 @@ const BrowseStores = ({route,navigation})=>{
                         <View>
                             <Text>{store.storeData.name}</Text>
                             <View>
-                            <FlatList data={store.storeData.products} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
+                            <FlatList data={store.storeData.products} renderItem={({item})=>
+                            <RenderedItem name={item.name} 
+                            price={item.price} 
+                            qty={item.qty} 
+                            unit={item.unit}/> } 
+                            keyExtractor={item=>item.id.toString()}/>
                             </View>
                             <Text>{store.storeData.address}</Text>
                             <View style={styles.emailContainer}>
