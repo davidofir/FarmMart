@@ -7,8 +7,11 @@ import ButtonComponent from '../components/ButtonComponent'
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import firebase from 'firebase';
+//import firebase, { auth, firestore } from 'firebase';
+import firebase, { firestore } from 'firebase';
+import 'firebase/firestore';
 const Login = ({navigation},props) => {
+    const db = firebase.firestore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -17,12 +20,16 @@ const Login = ({navigation},props) => {
             setError("");
             const response = await firebase.auth().signInWithEmailAndPassword(email, password).then(
                 (cred)=>{
-                    navigation.navigate("Menu",{
-                        password:password
-                    });
+                    db.collection("users").doc(cred.user.uid).get().then(
+                        (user)=>{
+                            navigation.navigate("Menu",{
+                            user:{id:cred.user.uid,password:password,name:user.data().name,lastName:user.data().lastName,address:user.data().address,long:user.data().long,lat:user.data().lat,inbox:user.data().inbox}
+                        })}
+                    )
+
             }
             );
-            // navigation.navigate("signin");
+            //user:{id:userID,email:email,password:password,firstName:name,lastName:lastName,address:shippingAddress,long:long,lat:lat}
 
         }
         catch (err) {

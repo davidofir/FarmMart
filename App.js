@@ -17,7 +17,7 @@ const firebaseConfig = {
   appId: "1:46976507025:web:329e6137319c16025e7330",
   measurementId: "G-WFEMP1F5BS"
 };
-if(firebase.apps.length === 0){
+if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
 import { Button, StyleSheet, Text, View } from 'react-native';
@@ -35,23 +35,33 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomePage}/>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="Signup" component={Signup}/>
-        <Stack.Screen name="Menu" component={Menu} options={({route,navigation})=>({
-          headerRight: ()=>(
-          <TouchableOpacity onPress={()=>{
-            
-            navigation.navigate("Profile",{password:route.params.password});
+        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="Menu" component={Menu} options={({ route, navigation }) => ({
+          headerRight: () => (
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity onPress={() => {
 
-          }} style={styles.editButton}>
+                navigation.navigate("Profile", { password: route.params.password });
+
+              }} style={styles.editButton}>
                 <Icon name='edit' type='material' />
-            </TouchableOpacity>)
-        })}/>
-        <Stack.Screen name="Profile" component={Profile}/>
-        <Stack.Screen name="AddStore" component={AddStore}/>
-        <Stack.Screen name="BrowseStores" component={BrowseStores}/>
-        <Stack.Screen name="Email" component={Email}/>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{
+                console.log(route.params.user);
+              }} style={styles.editButton}>
+                {
+                  (route.params.user.inbox == undefined || route.params.user.inbox.length == 0 ) ? (<Icon name='notifications-none' type='material' />) : <Icon name='notifications-active' type='material' />
+                } 
+              </TouchableOpacity>
+            </View>
+          )
+        })} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="AddStore" component={AddStore} />
+        <Stack.Screen name="BrowseStores" component={BrowseStores} />
+        <Stack.Screen name="Email" component={Email} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -62,10 +72,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent:"center",
+    justifyContent: "center",
   },
   editButton: {
     flexDirection: "row",
-    marginRight:8
-},
+    marginRight: 20
+  },
+  buttonsContainer: {
+    flexDirection: "row"
+  }
 });

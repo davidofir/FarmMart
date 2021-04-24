@@ -14,7 +14,7 @@ import ButtonComponent from '../components/ButtonComponent';
 import { useEffect } from 'react/cjs/react.development';
 const Menu = ({ route, navigation }) => {
     const db = firebase.firestore();
-    const password = route.params.password;
+    const password = route.params.user.password;
     const [firstName, setFirstName] = useState("");
     const [errorMsg, setErrorMsg] = useState(null);
     const [location, setLocation] = useState({longitude:-79.7019476,latitude:43.4701695,longitudeDelta: 0.0922,latitudeDelta: 0.0421});

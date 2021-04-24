@@ -25,6 +25,7 @@ const signup = ({navigation},props) => {
             Location.requestPermissionsAsync().then(
                 Location.geocodeAsync(address).then(
                     res=>{
+                        console.log(res);
                         setResLocation(res);
                         lat = resLocation[0].latitude;
                         long = resLocation[0].longitude;
@@ -43,14 +44,13 @@ const signup = ({navigation},props) => {
                             })
                         }).then(()=>{
                             navigation.navigate("Menu",{
-                                userId:userID,
-                                email:email,
-                                password:password
+                                user:{id:userID,email:email,password:password,firstName:name,lastName:lastName,shippingAddress:address,long:long,lat:lat,inbox:undefined}
                             });
                         }) 
                     
                 ).catch(
-                    ()=>{
+                    (e)=>{
+                        console.log(e);
                         Alert.alert("Error","Invalid location, please try again");
                     }
                 )
