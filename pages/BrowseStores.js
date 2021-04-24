@@ -43,7 +43,7 @@ const BrowseStores = ({Navigation,route})=>{
             </View>
                 </Marker>
                 {stores.map((store,index)=>(
-                <Marker key={index} coordinate={{latitude:store.lat,longitude:store.long}} title={store.name} description={store.address}>
+                <Marker key={index} coordinate={{latitude:store.storeData.lat,longitude:store.storeData.long}} title={store.storeData.name} description={store.storeData.address}>
                     {route.params.location ? (
                     <Circle
                         center={{
@@ -56,13 +56,13 @@ const BrowseStores = ({Navigation,route})=>{
                     ></Circle>
                     ) : null}
                     
-                    <Callout>
+                    <Callout onPress={()=>console.log(store.id)}>
                         <View>
-                            <Text>{store.name}</Text>
+                            <Text>{store.storeData.name}</Text>
                             <View>
-                            <FlatList data={store.products} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
+                            <FlatList data={store.storeData.products} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
                             </View>
-                            <Text>{store.address}</Text>
+                            <Text>{store.storeData.address}</Text>
                         </View>
                     </Callout>
                 </Marker>

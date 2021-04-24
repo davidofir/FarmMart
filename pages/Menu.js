@@ -67,7 +67,8 @@ const Menu = ({ route, navigation }) => {
                     db.collection("stores").get().then(
                         (snapshot)=>{
                             snapshot.docs.forEach(doc=>{
-                                stores.push(doc.data());
+                                let newData = {id:doc.id,storeData:doc.data()}
+                                stores.push(newData);
                             })
                         }
                     )
