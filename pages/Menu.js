@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: "flex-start",
+        justifyContent: "flex-start"
     },
 
     editButtonContainer: {

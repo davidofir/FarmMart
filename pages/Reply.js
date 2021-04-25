@@ -56,11 +56,11 @@ const Reply = ({route,navigation})=>{
 }
 
 const styles = StyleSheet.create({
-    container: { 
+    container: {
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: "flex-start",
+        justifyContent: "flex-start"
     },
     input: {
         padding: 5,
