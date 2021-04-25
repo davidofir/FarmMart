@@ -22,7 +22,7 @@ const Profile = ({route,navigation}) => {
     const [resLocation,setResLocation] = useState(null);
     const [error, setError] = useState("");
     const [address,setAddress] = useState("");
-    const currentPassword = route.params.password;
+    const currentPassword = route.params.user.password;
     let referenceName,referenceLastName,referenceAddress = "";
     db.collection("users").doc(user.uid).get().then((doc) => {
         referenceName = doc.data().firstName;

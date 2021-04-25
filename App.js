@@ -45,7 +45,7 @@ export default function App() {
             <View style={styles.buttonsContainer}>
               <TouchableOpacity onPress={() => {
 
-                navigation.navigate("Profile", { password: route.params.password });
+                navigation.navigate("Profile", { user: route.params.user });
 
               }} style={styles.editButton}>
                 <Icon name='edit' type='material' />
