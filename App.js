@@ -8,9 +8,10 @@ import * as firebase from 'firebase';
 import { LogBox } from 'react-native';
 import Menu from './pages/Menu';
 LogBox.ignoreLogs(['Setting a timer']);
-const firebaseConfig = {
-  apiKey: "AIzaSyC5_3euKIb8ScfRbQOM7AUqkBihbl2syf4",
+var firebaseConfig = {
+  apiKey: "AIzaSyDpBGwfl2ECrVrQ-ahPjaPIPxYOUgScLMU",
   authDomain: "farmmart-f2a33.firebaseapp.com",
+  databaseURL: "https://farmmart-f2a33-default-rtdb.firebaseio.com",
   projectId: "farmmart-f2a33",
   storageBucket: "farmmart-f2a33.appspot.com",
   messagingSenderId: "46976507025",

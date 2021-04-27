@@ -7,55 +7,63 @@ import 'firebase/firestore';
 import * as Location from 'expo-location';
 import 'react-native-gesture-handler';
 
-const signup = ({navigation},props) => {
+const signup = ({ navigation }, props) => {
     const db = firebase.firestore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [address, setAddress] = useState("");
     const [error, setError] = useState("");
-    const [name,setName] = useState("");
-    const [resLocation,setResLocation] = useState(null);
+    const [name, setName] = useState("");
+    const [resLocation, setResLocation] = useState(null);
     const [lastName, setLastName] = useState("");
+    const [city, setCity] = useState("");
+    const [streetNum, setStreetNum] = useState("");
+    const [street, setStreet] = useState();
+    const [country, setCountry] = useState();
+
     var userID = "";
     const SignupAction = async () => {
-        let long,lat;
+        let long, lat;
         try {
             setError("");
-            Location.requestPermissionsAsync().then(
-                Location.geocodeAsync(address).then(
-                    res=>{
-                        console.log(res);
-                        setResLocation(res);
-                        lat = resLocation[0].latitude;
-                        long = resLocation[0].longitude;
-                        console.log(`Long ${long} and lat ${lat}`);
-                    }
-                ).then( ()=>
-                    firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
+            if (city.length != 0 && streetNum.length != 0 && street.length != 0 && country.length != 0) {
+                setAddress(`${country},${city},${street},${streetNum}`);
+                Location.requestPermissionsAsync().then(
+                    Location.geocodeAsync(address).then(
+                        res => {
+                            console.log(res);
+                            setResLocation(res);
+                            console.log(resLocation[0]);
+                            lat = resLocation[0].latitude;
+                            long = resLocation[0].longitude;
+                            console.log(`Long ${long} and lat ${lat}`);
+                        }
+                    ).then(() =>
+                        firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
                             userID = cred.user.uid;
                             console.log(cred.user.uid);
                             return db.collection('users').doc(cred.user.uid).set({
                                 firstName: name,
                                 lastName: lastName,
                                 shippingAddress: address,
-                                long:long,
-                                lat:lat
+                                long: long,
+                                lat: lat
                             })
-                        }).then(()=>{
-                            navigation.navigate("Menu",{
-                                user:{id:userID,email:email,password:password,firstName:name,lastName:lastName,shippingAddress:address,long:long,lat:lat,inbox:undefined}
+                        }).then(() => {
+                            navigation.navigate("Menu", {
+                                user: { id: userID, email: email, password: password, firstName: name, lastName: lastName, shippingAddress: address, long: long, lat: lat, inbox: undefined }
                             });
-                        }) 
-                    
-                ).catch(
-                    (e)=>{
-                        console.log(e);
-                        Alert.alert("Error","Invalid location, please try again");
-                    }
-                )
-            );
+                        })
 
+                    ).catch(
+                        (e) => {
+                            console.log(e);
+                            Alert.alert("Error", "Invalid location, please try again");
+                        }
+                    )
+                );
+            }
         }
         catch (err) {
             setError(err);
@@ -76,15 +84,30 @@ const signup = ({navigation},props) => {
                     <TextInput placeholder="Confirm Password" onChangeText={setConfirmPassword} secureTextEntry={true} autoCompleteType="password" />
                 </View>
                 <View style={styles.nameContainer}>
-                    <View style={[styles.nameFields,{marginHorizontal:5}]}>
-                    <TextInput placeholder="First Name" onChangeText={setName} autoCompleteType={"name"}/>
+                    <View style={[styles.nameFields, { marginHorizontal: 5 }]}>
+                        <TextInput placeholder="First Name" onChangeText={setName} autoCompleteType={"name"} />
                     </View>
-                    <View style={[styles.nameFields,{marginHorizontal:24}]}>
-                    <TextInput placeholder="Last Name" onChangeText={setLastName}/>
+                    <View style={[styles.nameFields, { marginHorizontal: 24 }]}>
+                        <TextInput placeholder="Last Name" onChangeText={setLastName} />
                     </View>
                 </View>
-                <View style={styles.input}>
-                    <TextInput placeholder="Shipping Address" onChangeText={setAddress} autoCompleteType={"street-address"} />
+                <View>
+                    <View style={styles.nameContainer}>
+                        <View style={[styles.nameFields, { marginHorizontal: 5, width: 240 }]}>
+                            <TextInput placeholder="Street" onChangeText={setStreet} />
+                        </View>
+                        <View style={[styles.nameFields, { marginHorizontal: 24, width: 60 }]}>
+                            <TextInput placeholder="Number" onChangeText={setStreetNum} keyboardType="numeric" />
+                        </View>
+                    </View>
+                    <View style={styles.nameContainer}>
+                        <View style={[styles.nameFields, { marginHorizontal: 5 }]}>
+                            <TextInput placeholder="City" onChangeText={setCity} />
+                        </View>
+                        <View style={[styles.nameFields, { marginHorizontal: 24 }]}>
+                            <TextInput placeholder="Country" onChangeText={setCountry} />
+                        </View>
+                    </View>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -117,13 +140,14 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginHorizontal: 65
     },
-    nameContainer:{
-        flexDirection:"row",
+    nameContainer: {
+        flexDirection: "row",
     },
-    nameFields:{
-        borderBottomWidth:2,
-        borderBottomColor:Colors.primary,
-        width:150
+    nameFields: {
+        borderBottomWidth: 2,
+        borderBottomColor: Colors.primary,
+        width: 150,
+        marginVertical: 5
     }
 });
 export default signup;
