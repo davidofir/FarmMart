@@ -20,13 +20,14 @@ const AddStore = ({ navigation }) => {
     const [selectedIndex, setSelectedIndex] = useState(2);
     const [itemsList, setItemsList] = useState([]);
     const [itemID, setItemID] = useState(0);
-    const [resLocation, setResLocation] = useState(null);
-    const [address, setAddress] = useState("");
+    //const [address, setAddress] = useState("");
     const [error, setError] = useState("");
     const [city, setCity] = useState("");
     const [streetNum, setStreetNum] = useState("");
     const [street, setStreet] = useState();
     const [country, setCountry] = useState();
+    const [long, setLong] = useState(0);
+    const [lat, setLat] = useState(0);
     const [selectedUnitName, setSelectedUnitName] = useState("Liters");
     const RenderedItem = ({ name, price, qty, unit }) => (
         <View style={styles.itemsComponent}>
@@ -43,16 +44,17 @@ const AddStore = ({ navigation }) => {
         </View>
     );
     const createStore = async () => {
-        let long, lat;
-        let { status } = await Location.requestPermissionsAsync();
+        let lat,long;
+        let address = `${country},${city},${street} ${streetNum}`;
+        let { status } = await Location.requestPermissionsAsync();     
         try {
-            if (city.length != 0 && streetNum.length != 0 && street.length != 0 && country.length != 0) {
-                setAddress(`${country},${city},${street} ${streetNum}`);
+            
+                console.log(address);
                 let result = Location.geocodeAsync(address).then(
                     (res) => {
-                        setResLocation(res);
-                        lat = resLocation[0].latitude;
-                        long = resLocation[0].longitude;
+                        console.log(res);
+                        lat = res[0].latitude;
+                        long = res[0].longitude;
                         console.log(`Long ${long} and lat ${lat}`);
                     }
 
@@ -74,10 +76,6 @@ const AddStore = ({ navigation }) => {
                         }
                     )
 
-
-            }else{
-                Alert.alert("Error","The address fields cannot be left blank.");
-            }
         }
         catch (err) {
             setError(err);

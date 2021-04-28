@@ -25,19 +25,14 @@ const signup = ({ navigation }, props) => {
     var userID = "";
     const SignupAction = async () => {
         let long, lat;
+        let address = `${country},${city},${street} ${streetNum}`;        
         try {
             setError("");
-            if (city.length != 0 && streetNum.length != 0 && street.length != 0 && country.length != 0) {
-                setAddress(`${country},${city},${street} ${streetNum}`);
                 Location.requestPermissionsAsync().then(
                     Location.geocodeAsync(address).then(
                         res => {
-                            console.log(res);
-                            console.log(address);
-                            setResLocation(res);
-                            console.log(resLocation[0]);
-                            lat = resLocation[0].latitude;
-                            long = resLocation[0].longitude;
+                            lat = res[0].latitude;
+                            long = res[0].longitude;
                             console.log(`Long ${long} and lat ${lat}`);
                         }
                     ).then(() =>
@@ -64,10 +59,6 @@ const signup = ({ navigation }, props) => {
                         }
                     )
                 );
-            }
-            else{
-                Alert.alert("Error","The address fields cannot be left blank");
-            }
         }
         catch (err) {
             setError(err);
