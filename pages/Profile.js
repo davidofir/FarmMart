@@ -22,6 +22,10 @@ const Profile = ({route,navigation}) => {
     const [resLocation,setResLocation] = useState(null);
     const [error, setError] = useState("");
     const [address,setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [streetNum, setStreetNum] = useState("");
+    const [street, setStreet] = useState();
+    const [country, setCountry] = useState();
     const currentPassword = route.params.user.password;
     let referenceName,referenceLastName,referenceAddress = "";
     db.collection("users").doc(user.uid).get().then((doc) => {
@@ -87,6 +91,8 @@ const Profile = ({route,navigation}) => {
         }        
         if(referenceAddress !== address && address.length !== 0){
             try{
+                if (city.length != 0 && streetNum.length != 0 && street.length != 0 && country.length != 0) {
+                    setAddress(`${country},${city},${street} ${streetNum}`);
                 Location.requestPermissionsAsync().then(
                     Location.geocodeAsync(address).then(
                         res=>{
@@ -114,6 +120,10 @@ const Profile = ({route,navigation}) => {
                 )
                 //await userRef.update({shippingAddress:address});
         }
+        else{
+            Alert.alert("Error","The address fields cannot be left blank");
+        }
+    }
         catch (err) {
             setError(err);
             var errorFormatted = err.toString().replace("Error: ", "");
@@ -143,8 +153,23 @@ const Profile = ({route,navigation}) => {
             <View style={styles.input}>
             <TextInput onChangeText={setLastName} value={referenceLastName} placeholder="Last Name"/>
             </View>
-            <View style={styles.input}>
-            <TextInput onChangeText={setAddress} placeholder="Shipping Address"/>
+            <View style={{ marginLeft: 20 }}>
+                <View style={styles.nameContainer}>
+                    <View style={[styles.nameFields, { marginHorizontal: 5, width: 240 }]}>
+                        <TextInput placeholder="Street" onChangeText={setStreet} />
+                    </View>
+                    <View style={[styles.nameFields, { marginHorizontal: 24, width: 60 }]}>
+                        <TextInput placeholder="Number" onChangeText={setStreetNum} keyboardType="numeric" />
+                    </View>
+                </View>
+                <View style={styles.nameContainer}>
+                    <View style={[styles.nameFields, { marginHorizontal: 5 }]}>
+                        <TextInput placeholder="City" onChangeText={setCity} />
+                    </View>
+                    <View style={[styles.nameFields, { marginHorizontal: 24 }]}>
+                        <TextInput placeholder="Country" onChangeText={setCountry} />
+                    </View>
+                </View>
             </View>
             <View style={styles.buttonContainer}>
             <ButtonComponent clickEvent={() => Update()} background={Colors.primary} textColor={Colors.secondary} borderColorStyle={Colors.primary} buttonTitle="Update" />
@@ -173,5 +198,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginHorizontal: 65
     },
+    nameContainer: {
+        flexDirection: "row",
+    },
+    nameFields: {
+        borderBottomWidth: 2,
+        borderBottomColor: Colors.primary,
+        width: 150,
+        marginVertical: 5
+    }
 });
 export default Profile;

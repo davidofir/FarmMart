@@ -11,66 +11,75 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { Icon } from 'react-native-elements'
 import { FlatList } from 'react-native-gesture-handler';
 import firebase, { auth } from 'firebase';
-const AddStore = ({navigation}) => {
+const AddStore = ({ navigation }) => {
     const db = firebase.firestore();
     const [storeName, setStoreName] = useState("");
     const [itemName, setItemName] = useState("");
     const [price, setPrice] = useState(0);
     const [qty, setQty] = useState(0);
     const [selectedIndex, setSelectedIndex] = useState(2);
-    const [itemsList,setItemsList] = useState([]);
-    const [itemID,setItemID]=useState(0);
-    const [resLocation,setResLocation] = useState(null);
-    const [address,setAddress] = useState("");
-    const [error,setError] = useState("");
-    const [selectedUnitName,setSelectedUnitName] = useState("Liters");
-    const RenderedItem = ({name,price,qty,unit}) =>(
-            <View style={styles.itemsComponent}>
-                <View>
-                    <Text>
-                        {name}
-                    </Text>
-                </View>
-                <View style={{marginHorizontal:2}}>
-                    <Text>
+    const [itemsList, setItemsList] = useState([]);
+    const [itemID, setItemID] = useState(0);
+    const [resLocation, setResLocation] = useState(null);
+    const [address, setAddress] = useState("");
+    const [error, setError] = useState("");
+    const [city, setCity] = useState("");
+    const [streetNum, setStreetNum] = useState("");
+    const [street, setStreet] = useState();
+    const [country, setCountry] = useState();
+    const [selectedUnitName, setSelectedUnitName] = useState("Liters");
+    const RenderedItem = ({ name, price, qty, unit }) => (
+        <View style={styles.itemsComponent}>
+            <View>
+                <Text>
+                    {name}
+                </Text>
+            </View>
+            <View style={{ marginHorizontal: 2 }}>
+                <Text>
                     ${price} per {qty} {unit}
-                    </Text>
-                </View>
+                </Text>
+            </View>
         </View>
     );
-    const createStore = async()=>{
-        let long,lat;
-        let {status} = await Location.requestPermissionsAsync();
-        try{
-        let result = Location.geocodeAsync(address).then(
-            (res)=>{
-                setResLocation(res);
-                lat = resLocation[0].latitude;
-                long = resLocation[0].longitude;
-                console.log(`Long ${long} and lat ${lat}`);
-            }
-            
-        ).then(()=>{
-            return db.collection('stores').doc(auth().currentUser.uid).set({
-                name:storeName,
-                products:itemsList,
-                address:address,
-                long:long,
-                lat:lat
-               
-            }).then(()=>{
-                navigation.navigate("Menu");
-            })
-        })
-        .catch(
-            ()=>{
-                Alert.alert("Error","Invalid location, please try again");
-            }
-        )
+    const createStore = async () => {
+        let long, lat;
+        let { status } = await Location.requestPermissionsAsync();
+        try {
+            if (city.length != 0 && streetNum.length != 0 && street.length != 0 && country.length != 0) {
+                setAddress(`${country},${city},${street} ${streetNum}`);
+                let result = Location.geocodeAsync(address).then(
+                    (res) => {
+                        setResLocation(res);
+                        lat = resLocation[0].latitude;
+                        long = resLocation[0].longitude;
+                        console.log(`Long ${long} and lat ${lat}`);
+                    }
+
+                ).then(() => {
+                    return db.collection('stores').doc(auth().currentUser.uid).set({
+                        name: storeName,
+                        products: itemsList,
+                        address: address,
+                        long: long,
+                        lat: lat
+
+                    }).then(() => {
+                        navigation.navigate("Menu");
+                    })
+                })
+                    .catch(
+                        () => {
+                            Alert.alert("Error", "Invalid location, please try again");
+                        }
+                    )
 
 
+            }else{
+                Alert.alert("Error","The address fields cannot be left blank.");
+            }
         }
-        catch(err){
+        catch (err) {
             setError(err);
             var errorFormatted = err.toString().replace("Error: ", "");
             Alert.alert("Error", `${errorFormatted}`);
@@ -83,13 +92,28 @@ const AddStore = ({navigation}) => {
             <View style={styles.input}>
                 <TextInput placeholder="Store Name" onChangeText={setStoreName} />
             </View>
-            <View style={styles.input}>
-                    <TextInput placeholder="Store Address" onChangeText={setAddress}/>
+            <View style={{ marginLeft: 20 }}>
+                <View style={styles.nameContainer}>
+                    <View style={[styles.nameFields, { marginHorizontal: 5, width: 240 }]}>
+                        <TextInput placeholder="Street" onChangeText={setStreet} />
+                    </View>
+                    <View style={[styles.nameFields, { marginHorizontal: 24, width: 60 }]}>
+                        <TextInput placeholder="Number" onChangeText={setStreetNum} keyboardType="numeric" />
+                    </View>
                 </View>
-                <View style={{marginVertical:10}}>
-                    <Text>Store Products</Text>
+                <View style={styles.nameContainer}>
+                    <View style={[styles.nameFields, { marginHorizontal: 5 }]}>
+                        <TextInput placeholder="City" onChangeText={setCity} />
+                    </View>
+                    <View style={[styles.nameFields, { marginHorizontal: 24 }]}>
+                        <TextInput placeholder="Country" onChangeText={setCountry} />
+                    </View>
                 </View>
-            <FlatList data={itemsList} renderItem={({item})=><RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit}/> } keyExtractor={item=>item.id.toString()}/>
+            </View>
+            <View style={{ marginVertical: 10 }}>
+                <Text>Store Products</Text>
+            </View>
+            <FlatList data={itemsList} renderItem={({ item }) => <RenderedItem name={item.name} price={item.price} qty={item.qty} unit={item.unit} />} keyExtractor={item => item.id.toString()} />
             <View>
                 <View style={styles.addItems}>
                     <View style={[styles.itemsInput, { width: 150 }]}>
@@ -103,17 +127,17 @@ const AddStore = ({navigation}) => {
                     </View>
                     <View>
                         <TouchableOpacity onPress={() => {
-                             if (itemName.length > 0 && price.toString().length > 0 && qty.toString().length > 0) {
-                                setItemID(itemID+1);
+                            if (itemName.length > 0 && price.toString().length > 0 && qty.toString().length > 0) {
+                                setItemID(itemID + 1);
                                 let item = {
-                                    id:itemID,
-                                    name:itemName,
-                                    price:price,
-                                    qty:qty,
-                                    unit:selectedUnitName
+                                    id: itemID,
+                                    name: itemName,
+                                    price: price,
+                                    qty: qty,
+                                    unit: selectedUnitName
                                 }
-                                setItemsList([...itemsList,item]);
-                             }
+                                setItemsList([...itemsList, item]);
+                            }
                         }}>
                             <Icon name='add' type='material' />
                         </TouchableOpacity>
@@ -166,8 +190,17 @@ const styles = StyleSheet.create({
     saveButton: {
         margin: 12
     },
-    itemsComponent:{
-        flexDirection:"row",
+    itemsComponent: {
+        flexDirection: "row",
     },
+    nameContainer: {
+        flexDirection: "row",
+    },
+    nameFields: {
+        borderBottomWidth: 2,
+        borderBottomColor: Colors.primary,
+        width: 150,
+        marginVertical: 5
+    }
 });
 export default AddStore;
