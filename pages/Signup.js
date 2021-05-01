@@ -12,7 +12,6 @@ const signup = ({ navigation }, props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [address, setAddress] = useState("");
     const [error, setError] = useState("");
     const [name, setName] = useState("");
     const [resLocation, setResLocation] = useState(null);
