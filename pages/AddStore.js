@@ -20,7 +20,6 @@ const AddStore = ({ navigation }) => {
     const [selectedIndex, setSelectedIndex] = useState(2);
     const [itemsList, setItemsList] = useState([]);
     const [itemID, setItemID] = useState(0);
-    //const [address, setAddress] = useState("");
     const [error, setError] = useState("");
     const [city, setCity] = useState("");
     const [streetNum, setStreetNum] = useState("");
