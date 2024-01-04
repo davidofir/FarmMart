@@ -1,5 +1,5 @@
 # FarmMart
-FarmMart is a service which provides the user with the ability to easily locate farms that sell produce on a map in order to provide them with an ease of choice on where to buy fresh produce. The purpose of this app is add farmers a new stream of revenue that cuts the middle-man which enables a higher profit margin as well as potentially lower price for the consumers.
+FarmMart is a platform that allows the user to easily locate farms that sell produce on a map in order to provide them with an ease of choice on where to buy fresh produce. The purpose of this app is add farmers a new stream of revenue that cuts the middle-man which enables a higher profit margin as well as potentially lower price for the consumers.
 
 Target Audience:
 
